@@ -1,0 +1,4279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>🎣 낚시게임 사이트</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#08111f;
+    color:#fff
+}
+button{
+    border:0;
+    border-radius:10px;
+    padding:12px 16px;
+    cursor:pointer;
+    font-weight:bold;
+    margin:3px
+}
+input,select{
+    width:100%;
+    padding:12px;
+    margin:6px 0;
+    border-radius:8px;
+    border:1px solid #34445c;
+    background:#111d2e;
+    color:#fff
+}
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px
+}
+.card{
+    background:#101d30;
+    border:1px solid #263952;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:15px
+}
+.nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    margin-top:15px
+}
+.nav button{background:#1c304c;color:#fff}
+.nav button:hover{background:#29466d}
+.primary{background:#2389ff;color:#fff}
+.success{background:#20a464;color:#fff}
+.danger{background:#d94141;color:#fff}
+.warning{background:#d89519;color:#fff}
+.hidden{display:none!important}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:12px
+}
+.stat{
+    background:#16263d;
+    padding:15px;
+    border-radius:12px
+}
+.big{
+    font-size:30px;
+    font-weight:bold
+}
+.center{text-align:center}
+.small{
+    color:#9eb0c9;
+    font-size:13px
+}
+.progress{
+    width:100%;
+    height:14px;
+    background:#26364d;
+    border-radius:10px;
+    overflow:hidden
+}
+.progress-bar{
+    height:100%;
+    background:#28a7ff;
+    width:0%
+}
+.item{
+    background:#17263b;
+    border-radius:12px;
+    padding:14px
+}
+.auth{
+    max-width:420px;
+    margin:70px auto
+}
+.fish-result{
+    min-height:180px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center
+}
+.rarity{font-weight:bold}
+.r1{color:#bbb}
+.r2{color:#6fd36f}
+.r3{color:#55aaff}
+.r4{color:#bd73ff}
+.r5{color:#ffd447}
+.r6{color:#ff7b35}
+.r7{color:#ff4fe1}
+.r8{color:#ff4747}
+.r9{color:#a96cff}
+.r10{color:#ffb000}
+.r11{color:#73e8ff}
+.r12{color:#ff5cff}
+.r13{color:#fff;text-shadow:0 0 10px #fff}
+table{
+    width:100%;
+    border-collapse:collapse
+}
+th,td{
+    padding:10px;
+    border-bottom:1px solid #293a52;
+    text-align:left
+}
+.battle-box{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px
+}
+.battle-score{
+    font-size:40px;
+    font-weight:bold
+}
+#toast{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#17283e;
+    border:1px solid #45617f;
+    padding:12px 18px;
+    border-radius:10px;
+    display:none;
+    z-index:9999
+}
+@media(max-width:700px){
+    .battle-box{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast"></div>
+
+<!-- 로그인 -->
+<div id="authPage" class="container auth">
+    <div class="card">
+        <h1 class="center">🎣 낚시왕</h1>
+        <p class="center small">200종의 물고기를 잡고 최고의 낚시왕이 되어보세요!</p>
+
+        <input id="loginId" placeholder="아이디">
+        <input id="loginPw" type="password" placeholder="비밀번호">
+
+        <button class="primary" style="width:100%" onclick="login()">로그인</button>
+        <button style="width:100%" onclick="showSignup()">회원가입</button>
+    </div>
+</div>
+
+<!-- 회원가입 -->
+<div id="signupPage" class="container auth hidden">
+    <div class="card">
+        <h2>🎣 회원가입</h2>
+
+        <input id="signupId" placeholder="아이디">
+        <input id="signupNick" placeholder="닉네임">
+        <input id="signupPw" type="password" placeholder="비밀번호">
+
+        <button class="success" style="width:100%" onclick="signup()">회원가입</button>
+        <button style="width:100%" onclick="showLogin()">돌아가기</button>
+    </div>
+</div>
+
+<!-- 게임 -->
+<div id="gamePage" class="container hidden">
+
+    <div class="card">
+        <h1>🎣 낚시왕</h1>
+        <div id="userInfo"></div>
+
+        <div class="nav">
+            <button onclick="showPage('home')">🏠 홈</button>
+            <button onclick="showPage('fishing')">🎣 낚시</button>
+            <button onclick="showPage('battle')">⚔️ 대결</button>
+            <button onclick="showPage('transfer')">💸 송금</button>
+            <button onclick="showPage('fishdex')">🐟 물고기 도감</button>
+            <button onclick="showPage('itemdex')">💎 아이템 도감</button>
+            <button onclick="showPage('inventory')">🎒 인벤토리</button>
+            <button onclick="showPage('equipment')">🛡️ 장비</button>
+            <button onclick="showPage('shop')">🏪 상점</button>
+            <button onclick="showPage('ranking')">🏆 랭킹</button>
+            <button id="adminNavButton" class="danger hidden" onclick="showPage('admin')">👑 관리자</button>
+            <button class="danger" onclick="logout()">로그아웃</button>
+        </div>
+    </div>
+
+    <!-- 홈 -->
+    <section id="home" class="page">
+
+        <div class="card">
+            <h2>🏠 내 정보</h2>
+
+            <div id="homeStats" class="grid"></div>
+
+            <br>
+
+            <b>경험치</b>
+            <div class="progress">
+                <div id="expBar" class="progress-bar"></div>
+            </div>
+
+            <p id="expText" class="small"></p>
+        </div>
+
+        <div class="card">
+            <h2>📊 능력치</h2>
+            <div id="stats"></div>
+        </div>
+
+    </section>
+
+    <!-- 낚시 -->
+    <section id="fishing" class="page hidden">
+
+        <div class="card">
+            <h2>🎣 낚시</h2>
+
+            <div class="grid">
+
+                <div>
+                    <label>낚싯대</label>
+                    <select id="rodSelect" onchange="changeRod()"></select>
+                </div>
+
+                <div>
+                    <label>낚시터</label>
+                    <select id="locationSelect" onchange="changeLocation()"></select>
+                </div>
+
+                <div>
+                    <label>미끼</label>
+                    <select id="baitSelect" onchange="changeBait()"></select>
+                </div>
+
+            </div>
+
+            <br>
+
+            <button class="primary" onclick="fishOnce()">🎣 낚기!</button>
+            <button class="warning" onclick="usePotion()">🍀 행운 물약</button>
+            <button class="success" onclick="toggleAutoFishing()">🤖 자동 낚시</button>
+
+            <p id="autoStatus" class="small"></p>
+
+            <div id="fishResult" class="card fish-result">
+                <div class="big">🎣</div>
+                <p>낚시 버튼을 눌러보세요!</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>현재 장비</h3>
+            <div id="currentEquipment"></div>
+        </div>
+
+    </section>
+
+    <!-- 대결 -->
+    <section id="battle" class="page hidden">
+
+        <div class="card">
+            <h2>⚔️ 2인 낚시 대결</h2>
+
+            <p class="small">
+                같은 브라우저에 가입된 다른 계정과 대결합니다.
+                한 판은 30초입니다.
+            </p>
+
+            <div id="battleStartArea">
+
+                <select id="opponentSelect"></select>
+
+                <button class="danger" onclick="startBattle()">
+                    ⚔️ 대결 시작
+                </button>
+
+            </div>
+
+            <div id="battleArea" class="hidden">
+
+                <div class="center">
+                    <h2 id="battleTimer">30초</h2>
+                </div>
+
+                <div class="battle-box">
+
+                    <div class="card center">
+                        <h3>🧑 나</h3>
+                        <div id="myBattleScore" class="battle-score">0</div>
+                        <p id="myBattleFish">-</p>
+
+                        <button
+                            class="primary"
+                            onclick="battleCatch()"
+                            style="width:100%">
+                            🎣 낚기!
+                        </button>
+                    </div>
+
+                    <div class="card center">
+                        <h3>🤖 상대</h3>
+                        <div id="enemyBattleScore" class="battle-score">0</div>
+                        <p id="enemyBattleFish">-</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="battleResult" class="card hidden center"></div>
+        </div>
+
+        <div class="card">
+            <h3>⚔️ 대결 기록</h3>
+            <div id="battleStats"></div>
+            <br>
+            <div id="battleHistory"></div>
+        </div>
+
+    </section>
+
+   <!-- 기부 -->
+<section id="transfer" class="page hidden">
+
+    <div class="card">
+        <h2>🎁 코인 기부</h2>
+
+        <p>
+            현재 보유 코인:
+            <b id="transferMyCoins">0</b>
+        </p>
+
+        <label>기부할 코인</label>
+        <input
+            id="transferAmount"
+            type="number"
+            min="1"
+            placeholder="기부할 코인">
+
+        <button
+            class="primary"
+            style="width:100%"
+            onclick="donateCoins()">
+            🎁 기부하기
+        </button>
+    </div>
+</section>
+
+    <!-- 아이템 도감 -->
+    <section id="itemdex" class="page hidden">
+
+        <div class="card">
+            <h2>💎 아이템 도감</h2>
+            <p id="itemDexCount"></p>
+
+            <div id="itemDexGrid" class="grid"></div>
+        </div>
+
+    </section>
+
+    <!-- 인벤토리 -->
+    <section id="inventory" class="page hidden">
+
+        <div class="card">
+            <h2>🎒 물고기 인벤토리</h2>
+
+            <button class="success" onclick="sellAllFish()">
+                💰 물고기 전부 판매
+            </button>
+
+            <div id="fishInventory" class="grid"></div>
+        </div>
+
+        <div class="card">
+            <h2>💎 아이템 인벤토리</h2>
+            <div id="itemInventory" class="grid"></div>
+        </div>
+
+    </section>
+
+    <!-- 장비 -->
+    <section id="equipment" class="page hidden">
+
+        <div class="card">
+            <h2>🛡️ 장비</h2>
+
+            <p id="equipmentLimit"></p>
+
+            <div id="equippedItems" class="grid"></div>
+        </div>
+
+        <div class="card">
+            <h2>💎 장착 가능한 아이템</h2>
+
+            <div id="equipItems" class="grid"></div>
+        </div>
+
+    </section>
+
+    <!-- 상점 -->
+    <section id="shop" class="page hidden">
+
+        <div class="card">
+            <h2>🎲 랜덤 상점</h2>
+            <p class="small">상품은 30분마다 자동으로 변경됩니다.</p>
+            <p id="randomShopTimer" class="small"></p>
+            <button class="warning" onclick="refreshRandomShop(true)">🔄 상점 새로고침 (500,000 코인)</button>
+            <div id="randomShop" class="grid"></div>
+        </div>
+
+        <div class="card">
+            <h2>🏪 낚싯대 상점</h2>
+            <div id="rodShop" class="grid"></div>
+        </div>
+
+        <div class="card">
+            <h2>🌊 낚시터 상점</h2>
+            <div id="locationShop" class="grid"></div>
+        </div>
+
+        <div class="card">
+            <h2>🪱 미끼 상점</h2>
+            <div id="baitShop" class="grid"></div>
+        </div>
+
+    </section>
+
+    <!-- 👑 관리자 -->
+    <section id="admin" class="page hidden">
+        <div class="card">
+            <h2>👑 관리자 패널</h2>
+            <p class="small">관리자 전용 기능입니다.</p>
+
+            <label>대상 계정</label>
+            <select id="adminTarget"></select>
+
+            <div class="grid">
+                <div class="item">
+                    <b>💰 코인 지급/차감</b>
+                    <input id="adminCoins" type="number" placeholder="예: 500000">
+                    <button class="success" onclick="adminAddCoins()">지급</button>
+                    <button class="danger" onclick="adminRemoveCoins()">차감</button>
+                </div>
+
+                <div class="item">
+                    <b>⭐ 레벨 설정</b>
+                    <input id="adminLevel" type="number" min="1" placeholder="레벨">
+                    <button class="primary" onclick="adminSetLevel()">적용</button>
+                </div>
+
+                <div class="item">
+                    <b>📈 경험치 지급</b>
+                    <input id="adminExp" type="number" min="1" placeholder="EXP">
+                    <button class="primary" onclick="adminAddExp()">지급</button>
+                </div>
+
+                <div class="item">
+                    <b>🎁 아이템 지급</b>
+                    <select id="adminItem"></select>
+                    <input id="adminItemCount" type="number" min="1" value="1">
+                    <button class="success" onclick="adminGiveItem()">지급</button>
+                </div>
+
+                <div class="item">
+                    <b>🎣 낚싯대 지급</b>
+                    <select id="adminRod"></select>
+                    <button class="success" onclick="adminGiveRod()">지급</button>
+                </div>
+
+                <div class="item">
+                    <b>🌊 낚시터 지급</b>
+                    <select id="adminLocation"></select>
+                    <button class="success" onclick="adminGiveLocation()">지급</button>
+                </div>
+
+                <div class="item">
+                    <b>🪱 미끼 지급</b>
+                    <select id="adminBait"></select>
+                    <input id="adminBaitCount" type="number" min="1" value="10">
+                    <button class="success" onclick="adminGiveBait()">지급</button>
+                </div>
+
+                <div class="item">
+                    <b>🔄 랜덤 상점</b>
+                    <p class="small">관리자는 무료로 즉시 갱신</p>
+                    <button class="warning" onclick="adminRefreshShop()">무료 새로고침</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📢 관리자 공지</h3>
+            <input id="adminNotice" placeholder="공지 내용을 입력하세요">
+            <button class="primary" onclick="adminNoticeSend()">공지 표시</button>
+        </div>
+
+        <div class="card">
+            <h3>📋 관리자 목록</h3>
+            <div id="adminList"></div>
+        </div>
+    </section>
+
+    <!-- 랭킹 -->
+    <section id="ranking" class="page hidden">
+
+        <div class="card">
+            <h2>🏆 전체 랭킹</h2>
+           <section id="ranking" class="page hidden">
+    <div class="card">
+        <h2>🏆 코인 랭킹</h2>
+        <p class="small">현재 보유 코인이 많은 순서입니다.</p>
+
+        <div id="rankingTable"></div>
+    </div>
+</section>
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+
+
+/* ==============================
+   저장 키
+============================== */
+
+const ACCOUNT_KEY="fishingKing_accounts";
+const LOGIN_KEY="fishingKing_currentAccount";
+const RANDOM_SHOP_KEY="fishingKing_randomShop";
+const RANDOM_SHOP_REFRESH=30*60*1000;
+
+/* ==============================
+   👑 관리자 설정
+   아이디 또는 닉네임을 여기에 추가하세요.
+============================== */
+const ADMIN_NAMES=[
+    "Kevin12" , "우파루파ㅣ맨금" , "Kevinb_123", "디아" , "Geon7"
+];
+
+function isAdmin(){
+    if(!currentAccountId || !currentUser) return false;
+    return ADMIN_NAMES.some(name =>
+        String(name).toLowerCase()===String(currentAccountId).toLowerCase() ||
+        String(name).toLowerCase()===String(currentUser.nickname).toLowerCase()
+    );
+}
+
+
+
+/* ==============================
+   희귀도
+============================== */
+
+const rarity=[
+    ["일반",1,20],
+    ["고급",2,40],
+    ["희귀",3,100],
+    ["영웅",4,250],
+    ["전설",5,800],
+    ["초월",6,2500],
+    ["디바인",7,10000],
+    ["비밀",8,50000],
+    ["불멸",9,200000],
+    ["태초",10,1000000],
+    ["천상",11,5000000],
+    ["절대",12,20000000],
+    ["미지",13,100000000]
+];
+
+
+/* ==============================
+   물고기 200종
+============================== */
+
+const fishNames=[
+
+"멸치","정어리","고등어","전갱이","청어","갈치","꽁치","삼치","참치","방어",
+"연어","송어","잉어","붕어","메기","가물치","농어","우럭","광어","도미",
+"복어","쥐치","오징어","문어","새우","꽃게","대게","랍스터","장어","청새치",
+"황새치","돛새치","가오리","상어","고래상어","귀상어","백상아리","범고래","돌고래","참돌고래",
+"해파리","불가사리","성게","소라","전복","조개","진주조개","해마","복해마","흰동가리",
+"블루탱","나비고기","천사어","사자어","곰치","전기뱀장어","아귀","심해어","초롱아귀","용암어",
+
+"불꽃잉어","얼음송어","번개참치","독도미","황금붕어","황금잉어","황금연어","황금참치","황금상어","황금고래",
+"무지개송어","무지개잉어","무지개참치","별빛도미","별빛상어","달빛연어","달빛고래","태양참치","태양상어","태양고래",
+"우주어","성운어","혜성어","행성어","블랙홀어","차원어","시간어","공간어","미래어","과거어",
+"신화어","신룡어","용왕어","해신어","바다신어","천사어왕","악마어왕","신성어","암흑어","혼돈어",
+"질서어","창조어","파괴어","영원어","무한어","궁극어","초궁극어","절대어","초월어왕","미지어",
+
+"태초의 물고기","천상의 물고기","절대의 물고기","무한의 물고기","세계수어","신의 물고기","시간의 지배자","공간의 지배자","차원의 지배자","우주의 지배자",
+"창조의 물고기","종말의 물고기","영원의 물고기","미지의 왕","최후의 물고기","낚시왕의 물고기",
+"심해의 군주","바다의 군주","폭풍참치","폭풍상어","폭풍고래","번개의 지배자","불꽃의 지배자","얼음의 지배자","태양의 지배자","달의 지배자",
+"별의 지배자","은하어","은하상어","은하고래","초신성어","혜성의 왕","행성의 왕","블랙홀의 왕","시간의 왕","공간의 왕",
+"차원의 왕","우주의 왕","신계어","천계어","마계어","신성한 고래","암흑의 고래","혼돈의 고래","질서의 고래","창조의 왕",
+"파괴의 왕","영원의 왕","무한의 왕","궁극의 왕","절대의 왕","초월의 왕","미지의 신","태초의 왕","천상의 왕","전설의 낚시왕",
+"심해룡어","해신의 사자","용왕의 사자","차원의 용","시간의 용","공간의 용","우주의 용","창조룡","파괴룡","영원룡",
+"무한룡","절대룡","초월룡","미지룡","신의 사자","세계의 수호어","세계의 파괴어","세계의 창조어","최후의 왕","궁극의 물고기",
+
+"심연의 물고기","태양룡어","달빛룡어","별빛룡어","은하의 지배자","성운의 지배자","우주룡","차원룡왕","시간룡왕","공간룡왕",
+```js
+"창조신어","파괴신어","영원신어","무한신어",
+
+/* ⭐ 10등급 태초 */
+"태초룡왕","태초신룡","태초의 해신","태초의 용왕","태초의 심해왕",
+"태초의 우주어","태초의 은하어","태초의 성운어","태초의 차원어","태초의 시간어",
+"태초의 공간어","태초의 창조어","태초의 파괴어","태초의 혼돈어","태초의 질서어",
+"태초의 영원어","태초의 무한어","태초의 궁극어","태초의 절대어","태초의 미지어",
+"태초의 신어","태초의 왕어","태초의 지배자","태초의 수호자","태초의 파괴자",
+"태초의 창조신","태초의 파괴신","태초의 시간신","태초의 공간신","태초의 차원신",
+"태초의 우주신","태초의 은하신","태초의 성운신","태초의 별신","태초의 태양신",
+"태초의 달신","태초의 심연신","태초의 바다신","태초의 폭풍신","태초의 번개신",
+"태초의 불꽃신","태초의 얼음신","태초의 빛신","태초의 어둠신","태초의 혼돈신",
+"태초의 질서신","태초의 영원신","태초의 무한신","태초의 궁극신","태초의 절대신",
+"태초의 세계왕","태초의 우주왕","태초의 차원왕","태초의 시간왕","태초의 공간왕",
+"태초의 심연왕","태초의 바다왕","태초의 폭풍왕","태초의 신계왕","태초의 천계왕",
+"태초의 마계왕","태초의 용왕신","태초의 해신왕","태초의 심해룡","태초의 우주룡",
+"태초의 차원룡","태초의 시간룡","태초의 공간룡","태초의 은하룡","태초의 성운룡",
+"태초의 세계룡","태초의 창조룡왕","태초의 파괴룡왕","태초의 영원룡왕","태초의 무한룡왕",
+
+/* 👑 11등급 천상 */
+"천상의 용왕","천상의 신룡","천상의 해신","천상의 심해왕","천상의 우주왕",
+"천상의 은하왕","천상의 성운왕","천상의 차원왕","천상의 시간왕","천상의 공간왕",
+"천상의 세계왕","천상의 창조왕","천상의 파괴왕","천상의 영원왕","천상의 무한왕",
+"천상의 궁극왕","천상의 절대왕","천상의 미지왕","천상의 신왕","천상의 수호왕",
+"천상의 파괴신","천상의 창조신","천상의 시간신","천상의 공간신","천상의 차원신",
+"천상의 우주신","천상의 은하신","천상의 성운신","천상의 태양신","천상의 달신",
+"천상의 별신","천상의 심연신","천상의 바다신","천상의 폭풍신","천상의 번개신",
+"천상의 불꽃신","천상의 얼음신","천상의 빛신","천상의 어둠신","천상의 혼돈신",
+"천상의 질서신","천상의 영원신","천상의 무한신","천상의 궁극신","천상의 절대신",
+"천상룡","천상룡왕","천상신룡왕","천상세계룡","천상우주룡",
+"천상차원룡","천상시간룡","천상공간룡","천상은하룡","천상성운룡",
+"천상심연룡","천상바다룡","천상폭풍룡","천상번개룡","천상불꽃룡",
+"천상얼음룡","천상빛의룡","천상어둠룡","천상혼돈룡","천상질서룡",
+"천상영원룡","천상무한룡","천상궁극룡","천상절대룡","천상미지룡",
+
+/* 💠 12등급 절대 */
+"절대신룡","절대용왕","절대해신","절대심해왕","절대우주왕",
+"절대은하왕","절대성운왕","절대차원왕","절대시간왕","절대공간왕",
+"절대세계왕","절대창조왕","절대파괴왕","절대영원왕","절대무한왕",
+"절대궁극왕","절대미지왕","절대신왕","절대수호왕","절대파괴신",
+"절대창조신","절대시간신","절대공간신","절대차원신","절대우주신",
+"절대은하신","절대성운신","절대태양신","절대달신","절대별신",
+"절대심연신","절대바다신","절대폭풍신","절대번개신","절대불꽃신",
+"절대얼음신","절대빛신","절대어둠신","절대혼돈신","절대질서신",
+"절대영원신","절대무한신","절대궁극신","절대세계신","절대우주룡",
+"절대차원룡","절대시간룡","절대공간룡","절대은하룡","절대성운룡",
+"절대심연룡","절대바다룡","절대폭풍룡","절대번개룡","절대불꽃룡",
+"절대얼음룡","절대빛룡","절대어둠룡","절대혼돈룡","절대질서룡",
+"절대영원룡","절대무한룡","절대궁극룡","절대세계룡","절대신룡왕",
+"절대천상룡","절대태초룡","절대창조룡","절대파괴룡","절대영원룡왕",
+"절대무한룡왕","절대차원룡왕","절대시간룡왕","절대공간룡왕","절대우주룡왕",
+
+/* 🌠 13등급 미지 */
+"미지의 신룡","미지의 용왕","미지의 해신","미지의 심해왕","미지의 우주왕",
+"미지의 은하왕","미지의 성운왕","미지의 차원왕","미지의 시간왕","미지의 공간왕",
+"미지의 세계왕","미지의 창조왕","미지의 파괴왕","미지의 영원왕","미지의 무한왕",
+"미지의 궁극왕","미지의 절대왕","미지의 신왕","미지의 수호왕","미지의 파괴신",
+"미지의 창조신","미지의 시간신","미지의 공간신","미지의 차원신","미지의 우주신",
+"미지의 은하신","미지의 성운신","미지의 태양신","미지의 달신","미지의 별신",
+"미지의 심연신","미지의 바다신","미지의 폭풍신","미지의 번개신","미지의 불꽃신",
+"미지의 얼음신","미지의 빛신","미지의 어둠신","미지의 혼돈신","미지의 질서신",
+"미지의 영원신","미지의 무한신","미지의 궁극신","미지의 절대신","미지룡왕",
+"미지신룡왕","미지세계룡","미지우주룡","미지차원룡","미지시간룡",
+"미지공간룡","미지은하룡","미지성운룡","미지심연룡","미지바다룡",
+"미지폭풍룡","미지번개룡","미지불꽃룡","미지얼음룡","미지빛룡",
+"미지어둠룡","미지혼돈룡","미지질서룡","미지영원룡","미지무한룡",
+"미지궁극룡","미지절대룡","미지세계신룡","미지우주신룡","미지차원신룡",
+
+/* 🌌 최상위 13등급 */
+"무명의 신","태초의 절대자","천상의 절대자","절대의 절대자","미지의 절대자",
+"세계의 끝","우주의 끝","차원의 끝","시간의 끝","공간의 끝",
+"영원의 끝","무한의 끝","창조의 근원","파괴의 근원","혼돈의 근원",
+"질서의 근원","시간의 근원","공간의 근원","차원의 근원","우주의 근원",
+"세계의 근원","태초의 근원","신의 근원","심연의 근원","바다의 근원",
+"용의 근원","빛의 근원","어둠의 근원","별의 근원","은하의 근원",
+"성운의 근원","천상의 근원","절대의 근원","미지의 근원","궁극의 근원",
+"영원의 지배자","무한의 지배자","절대의 지배자","미지의 지배자","태초의 지배자",
+"천상의 지배자","세계의 지배자","우주의 지배자","차원의 지배자","시간의 지배자",
+"공간의 지배자","창조의 지배자","파괴의 지배자","혼돈의 지배자","질서의 지배자",
+"심연의 지배자","바다의 지배자","별의 지배자","은하의 지배자","성운의 지배자",
+"신들의 지배자","용들의 지배자","세계의 신","우주의 신","차원의 신",
+"시간의 신","공간의 신","창조의 신","파괴의 신","혼돈의 신",
+"질서의 신","영원의 신","무한의 신","절대의 신","미지의 신",
+"태초의 신","천상의 신","궁극의 신","심연의 신","바다의 신"
+];
+```
+
+
+];
+
+const fish=fishNames.map((name,index)=>{
+
+    const tier=Math.min(
+        13,
+        Math.floor(index/10)+1
+    );
+
+    const r=rarity[tier-1];
+
+    return{
+        id:"fish_"+index,
+        name:name,
+        tier:tier,
+        rarity:r[0],
+        price:r[2]
+    };
+
+});
+
+
+/* ==============================
+   아이템 150개
+============================== */
+
+const prefixes=[
+"낡은",
+"빛나는",
+"신비한",
+"황금",
+"무지개",
+"전설의",
+"고대의",
+"심해의",
+"천상의",
+"차원의",
+"신성한",
+"암흑의",
+"시간의",
+"공간의",
+"우주의"
+];
+
+const bases=[
+"조개",
+"진주",
+"보석",
+"상자",
+"열쇠",
+"나침반",
+"메달",
+"반지",
+"동전",
+"수정"
+];
+
+const abilityNames={
+    luck:"🍀 낚시 행운",
+    speed:"⚡ 낚시 속도",
+    sell:"💰 판매 가격",
+    item:"💎 아이템 획득률",
+    rare:"⭐ 희귀 확률",
+    exp:"📈 경험치 획득"
+};
+
+const items=[];
+let itemIndex=0;
+
+for(const prefix of prefixes){
+
+    for(const base of bases){
+
+        const tier=Math.floor(itemIndex/10)+1;
+        const power=2+tier*2;
+
+        const ability1=[
+            "luck",
+            "speed",
+            "sell",
+            "item",
+            "rare",
+            "exp"
+        ][itemIndex%6];
+
+        const ability2=[
+            "sell",
+            "item",
+            "rare",
+            "exp",
+            "luck",
+            "speed"
+        ][itemIndex%6];
+
+        items.push({
+            id:"item_"+itemIndex,
+            name:prefix+" "+base,
+            tier:tier,
+            price:100*(itemIndex+1),
+            abilities:{
+                [ability1]:power,
+                [ability2]:Math.floor(power*0.7)
+            }
+        });
+
+        itemIndex++;
+    }
+}
+
+
+/* ==============================
+   낚싯대
+============================== */
+
+const rods=[
+    {
+        id:"wood",
+        name:"나무 낚싯대",
+        price:0,
+        luck:1
+    },
+    {
+        id:"iron",
+        name:"철 낚싯대",
+        price:1000,
+        luck:1.3
+    },
+    {
+        id:"gold",
+        name:"황금 낚싯대",
+        price:10000,
+        luck:2
+    },
+    {
+        id:"diamond",
+        name:"다이아 낚싯대",
+        price:100000,
+        luck:3
+    },
+    {
+        id:"divine",
+        name:"신성 낚싯대",
+        price:1000000,
+        luck:5
+    },
+    {
+        id:"unknown",
+        name:"미지의 낚싯대",
+        price:10000000,
+        luck:10
+    }
+];
+
+
+/* ==============================
+   낚시터
+============================== */
+
+const locations=[
+    {
+        id:"sea",
+        name:"평범한 바다",
+        price:0,
+        luck:1
+    },
+    {
+        id:"deep",
+        name:"심해",
+        price:5000,
+        luck:1.5
+    },
+    {
+        id:"ice",
+        name:"얼음 바다",
+        price:50000,
+        luck:2
+    },
+    {
+        id:"volcano",
+        name:"용암 바다",
+        price:500000,
+        luck:3
+    },
+    {
+        id:"space",
+        name:"우주 바다",
+        price:5000000,
+        luck:5
+    },
+    {
+        id:"dimension",
+        name:"차원 바다",
+        price:50000000,
+        luck:10
+    }
+];
+
+
+/* ==============================
+   미끼
+============================== */
+
+const baits=[
+    {
+        id:"basic",
+        name:"기본 미끼",
+        price:0,
+        luck:1
+    },
+    {
+        id:"good",
+        name:"좋은 미끼",
+        price:100,
+        luck:1.3
+    },
+    {
+        id:"rare",
+        name:"희귀 미끼",
+        price:1000,
+        luck:1.8
+    },
+    {
+        id:"divine",
+        name:"신성 미끼",
+        price:10000,
+        luck:3
+    }
+];
+
+
+/* ==============================
+   기본 유저
+============================== */
+
+function defaultUser(nickname){
+
+    return{
+
+        nickname:nickname||"낚시꾼",
+
+        coins:500,
+
+        level:1,
+
+        exp:0,
+
+        fishInventory:{},
+
+        itemInventory:{},
+
+        fishDiscovered:[],
+
+        itemDiscovered:[],
+
+        ownedRods:["wood"],
+
+        currentRod:"wood",
+
+        ownedLocations:["sea"],
+
+        currentLocation:"sea",
+
+        baitInventory:{
+            basic:1
+        },
+
+        currentBait:"basic",
+
+        potionCount:0,
+
+        potionExpiresAt:0,
+
+        totalFishCaught:0,
+
+        totalCoinsEarned:0,
+
+        equippedItems:[],
+
+        itemStats:{
+            luck:0,
+            speed:0,
+            sell:0,
+            item:0,
+            rare:0,
+            exp:0
+        },
+
+        battleWins:0,
+        battleLosses:0,
+        battleDraws:0,
+        battlePlayed:0,
+        battleHistory:[],
+
+        transferHistory:[],
+
+        fishDexRewardClaimed:false
+
+    };
+
+}
+
+
+/* ==============================
+   계정
+============================== */
+
+function getAccounts(){
+
+    return JSON.parse(
+        localStorage.getItem(ACCOUNT_KEY)||"{}"
+    );
+
+}
+
+function saveAccounts(accounts){
+
+    localStorage.setItem(
+        ACCOUNT_KEY,
+        JSON.stringify(accounts)
+    );
+
+}
+
+let currentUser=null;
+let currentAccountId=null;
+
+
+/* ==============================
+   로그인 / 회원가입
+============================== */
+
+function showSignup(){
+
+    document.getElementById("authPage")
+        .classList.add("hidden");
+
+    document.getElementById("signupPage")
+        .classList.remove("hidden");
+
+}
+
+function showLogin(){
+
+    document.getElementById("signupPage")
+        .classList.add("hidden");
+
+    document.getElementById("authPage")
+        .classList.remove("hidden");
+
+}
+
+function signup(){
+
+    const id=
+        document.getElementById("signupId")
+        .value.trim();
+
+    const nick=
+        document.getElementById("signupNick")
+        .value.trim();
+
+    const pw=
+        document.getElementById("signupPw")
+        .value;
+
+    if(!id||!nick||!pw){
+
+        toast("모든 항목을 입력해주세요.");
+        return;
+
+    }
+
+    const accounts=getAccounts();
+
+    if(accounts[id]){
+
+        toast("이미 존재하는 아이디입니다.");
+        return;
+
+    }
+
+    accounts[id]={
+        nickname:nick,
+        password:pw,
+        game:defaultUser(nick)
+    };
+
+    saveAccounts(accounts);
+
+    toast("회원가입 완료!");
+
+    showLogin();
+
+}
+
+function login(){
+
+    const id=
+        document.getElementById("loginId")
+        .value.trim();
+
+    const pw=
+        document.getElementById("loginPw")
+        .value;
+
+    const accounts=getAccounts();
+
+    if(
+        !accounts[id]||
+        accounts[id].password!==pw
+    ){
+
+        toast("아이디 또는 비밀번호가 틀렸습니다.");
+        return;
+
+    }
+
+    currentAccountId=id;
+
+    currentUser=
+        accounts[id].game||
+        defaultUser(accounts[id].nickname);
+
+    localStorage.setItem(
+        LOGIN_KEY,
+        id
+    );
+
+    openGame();
+
+}
+
+function logout(){
+
+    saveGame();
+
+    currentUser=null;
+    currentAccountId=null;
+
+    localStorage.removeItem(LOGIN_KEY);
+
+    document.getElementById("gamePage")
+        .classList.add("hidden");
+
+    document.getElementById("authPage")
+        .classList.remove("hidden");
+
+}
+
+function openGame(){
+
+    document.getElementById("authPage")
+        .classList.add("hidden");
+
+    document.getElementById("signupPage")
+        .classList.add("hidden");
+
+    document.getElementById("gamePage")
+        .classList.remove("hidden");
+
+    renderAll();
+
+}
+
+
+/* ==============================
+   저장
+============================== */
+
+function saveGame(){
+
+    if(!currentAccountId||!currentUser)
+        return;
+
+    const accounts=getAccounts();
+
+    if(!accounts[currentAccountId])
+        return;
+
+    accounts[currentAccountId].nickname=
+        currentUser.nickname;
+
+    accounts[currentAccountId].game=
+        currentUser;
+
+    saveAccounts(accounts);
+
+}
+
+
+/* ==============================
+   페이지
+============================== */
+
+function showPage(id){
+
+    document.querySelectorAll(".page")
+        .forEach(page=>{
+            page.classList.add("hidden");
+        });
+
+    const page=document.getElementById(id);
+
+    if(page)
+        page.classList.remove("hidden");
+
+    renderAll();
+
+}
+
+
+/* ==============================
+   능력치
+============================== */
+
+function calculateItemStats(){
+
+    const stats={
+        luck:0,
+        speed:0,
+        sell:0,
+        item:0,
+        rare:0,
+        exp:0
+    };
+
+    for(const itemId of currentUser.equippedItems){
+
+        const item=
+            items.find(x=>x.id===itemId);
+
+        if(!item)
+            continue;
+
+        for(const key in item.abilities){
+
+            if(stats[key]!==undefined){
+
+                stats[key]+=
+                    item.abilities[key];
+
+            }
+
+        }
+
+    }
+
+    currentUser.itemStats=stats;
+
+    return stats;
+
+}
+
+function getTotalStats(){
+
+    const itemStats=
+        calculateItemStats();
+
+    const rod=
+        rods.find(x=>x.id===currentUser.currentRod)
+        ||rods[0];
+
+    const location=
+        locations.find(
+            x=>x.id===currentUser.currentLocation
+        )||locations[0];
+
+    const bait=
+        baits.find(
+            x=>x.id===currentUser.currentBait
+        )||baits[0];
+
+    let luck=
+        rod.luck*
+        location.luck*
+        bait.luck;
+
+    if(
+        currentUser.potionExpiresAt>
+        Date.now()
+    ){
+
+        luck*=1.5;
+
+    }
+
+    luck*=
+        1+itemStats.luck/100;
+
+    return{
+
+        luck:luck,
+        speed:itemStats.speed,
+        sell:itemStats.sell,
+        item:itemStats.item,
+        rare:itemStats.rare,
+        exp:itemStats.exp
+
+    };
+
+}
+
+
+/* ==============================
+   경험치
+============================== */
+
+function expRequired(){
+
+    return 100+
+        (currentUser.level-1)*50;
+
+}
+
+function addExp(amount){
+
+    const stats=getTotalStats();
+
+    amount*=
+        1+stats.exp/100;
+
+    currentUser.exp+=amount;
+
+    while(
+        currentUser.exp>=expRequired()
+    ){
+
+        currentUser.exp-=
+            expRequired();
+
+        currentUser.level++;
+
+        currentUser.coins+=500;
+
+        toast(
+            "🎉 레벨 업! Lv."+
+            currentUser.level
+        );
+
+    }
+
+}
+
+
+/* ==============================
+   랜덤 물고기
+============================== */
+
+function getRandomFish(){
+
+    return getRandomFishForLuck(
+        getTotalStats().luck
+    );
+
+}
+
+function getRandomFishForLuck(luck){
+
+    /*
+       🎣 개선된 낚시 확률 시스템
+
+       - 물고기 가격을 확률 계산에서 제외
+       - 등급별 기본 확률을 적용
+       - luck은 높은 등급일수록 조금 더 강하게 적용
+       - rare 능력치는 5등급 이상에 추가 보정
+       - 확률은 자동 정규화되어 전체 합계가 100%가 됨
+    */
+
+    const rareBonus=
+        getTotalStats().rare;
+
+    /*
+       등급별 기본 가중치
+       1  일반
+       2  고급
+       3  희귀
+       4  영웅
+       5  전설
+       6  초월
+       7  디바인
+       8  비밀
+       9  불멸
+       10 태초
+       11 천상
+       12 절대
+       13 미지
+    */
+
+    const tierBaseWeights=[
+        52,
+        24,
+        10,
+        5.5,
+        3,
+        1.8,
+        1,
+        0.45,
+        0.2,
+        0.08,
+        0.04,
+        0.015,
+        0.005
+    ];
+
+    const safeLuck=
+        Math.max(1,Number(luck)||1);
+
+    const weights=
+        fish.map(f=>{
+
+            /*
+               luck 효과를 완만하게 적용해서
+               고등급 확률이 너무 폭발하지 않도록 함.
+            */
+
+            const luckEffect=
+                Math.pow(
+                    safeLuck,
+                    Math.min(
+                        3,
+                        0.18+(f.tier-1)*0.12
+                    )
+                );
+
+            let weight=
+                tierBaseWeights[f.tier-1]*
+                luckEffect;
+
+            /*
+               희귀 확률 능력치:
+               5등급 이상에 추가 보정.
+               최대 +150%까지만 적용.
+            */
+
+            if(f.tier>=5){
+
+                weight*=
+                    1+
+                    Math.min(
+                        150,
+                        rareBonus
+                    )/100;
+
+            }
+
+            return weight;
+
+        });
+
+    const total=
+        weights.reduce(
+            (a,b)=>
+                a+b,
+            0
+        );
+
+    let random=
+        Math.random()*total;
+
+    for(let i=0;i<fish.length;i++){
+
+        random-=weights[i];
+
+        if(random<=0)
+            return fish[i];
+
+    }
+
+    return fish[0];
+
+}
+
+
+/* ==============================
+   낚시
+============================== */
+
+function fishOnce(){
+
+    const caught=getRandomFish();
+
+    currentUser.fishInventory[caught.id]=
+        (currentUser.fishInventory[caught.id]||0)+1;
+
+    if(
+        !currentUser.fishDiscovered
+            .includes(caught.id)
+    ){
+
+        currentUser.fishDiscovered.push(
+            caught.id
+        );
+
+        checkFishDexReward();
+
+    }
+
+    currentUser.totalFishCaught++;
+
+    const exp=
+        10+
+        caught.tier*15;
+
+    addExp(exp);
+
+    let itemDrop=null;
+
+    const stats=getTotalStats();
+
+    const itemChance=
+        12+stats.item;
+
+    if(
+        Math.random()*100<
+        itemChance
+    ){
+
+        itemDrop=
+            items[
+                Math.floor(
+                    Math.random()*items.length
+                )
+            ];
+
+        currentUser.itemInventory[itemDrop.id]=
+            (currentUser.itemInventory[itemDrop.id]||0)+1;
+
+        if(
+            !currentUser.itemDiscovered
+                .includes(itemDrop.id)
+        ){
+
+            currentUser.itemDiscovered.push(
+                itemDrop.id
+            );
+
+        }
+
+    }
+
+    renderFishResult(
+        caught,
+        exp,
+        itemDrop
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+function renderFishResult(
+    caught,
+    exp,
+    itemDrop
+){
+
+    let html=`
+
+        <div class="big">🐟</div>
+
+        <h2 class="rarity r${caught.tier}">
+            ${caught.name}
+        </h2>
+
+        <p>
+            ${caught.rarity}
+            · ${caught.price.toLocaleString()} 코인
+        </p>
+
+        <p class="small">
+            +${exp} EXP
+        </p>
+
+    `;
+
+    if(itemDrop){
+
+        html+=`
+
+            <hr style="width:80%">
+
+            <p>
+                💎 아이템 획득:
+                <b>${itemDrop.name}</b>
+            </p>
+
+        `;
+
+    }
+
+    document.getElementById("fishResult")
+        .innerHTML=html;
+
+}
+
+
+/* ==============================
+   자동 낚시
+============================== */
+
+let autoFishing=false;
+let autoTimer=null;
+
+function toggleAutoFishing(){
+
+    autoFishing=!autoFishing;
+
+    if(autoFishing){
+
+        autoTimer=setInterval(
+            fishOnce,
+            3000
+        );
+
+        toast("🤖 자동 낚시 시작!");
+
+    }else{
+
+        clearInterval(autoTimer);
+
+        autoTimer=null;
+
+        toast("자동 낚시 종료!");
+
+    }
+
+    updateAutoStatus();
+
+}
+
+function updateAutoStatus(){
+
+    const el=
+        document.getElementById("autoStatus");
+
+    if(!el)
+        return;
+
+    el.textContent=
+        autoFishing
+        ?"🟢 자동 낚시 중..."
+        :"⚪ 자동 낚시 꺼짐";
+
+}
+
+
+/* ==============================
+   물약
+============================== */
+
+function usePotion(){
+
+    if(currentUser.potionCount<=0){
+
+        toast("행운 물약이 없습니다.");
+        return;
+
+    }
+
+    currentUser.potionCount--;
+
+    currentUser.potionExpiresAt=
+        Date.now()+60000;
+
+    toast(
+        "🍀 60초 동안 행운이 증가합니다!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+
+/* ==============================
+   장비 변경
+============================== */
+
+function changeRod(){
+
+    const id=
+        document.getElementById("rodSelect")
+        .value;
+
+    if(
+        currentUser.ownedRods.includes(id)
+    ){
+
+        currentUser.currentRod=id;
+
+        saveGame();
+        renderAll();
+
+    }
+
+}
+
+function changeLocation(){
+
+    const id=
+        document.getElementById("locationSelect")
+        .value;
+
+    if(
+        currentUser.ownedLocations.includes(id)
+    ){
+
+        currentUser.currentLocation=id;
+
+        saveGame();
+        renderAll();
+
+    }
+
+}
+
+function changeBait(){
+
+    const id=
+        document.getElementById("baitSelect")
+        .value;
+
+    if(
+        (currentUser.baitInventory[id]||0)>0
+    ){
+
+        currentUser.currentBait=id;
+
+        saveGame();
+        renderAll();
+
+    }
+
+}
+
+
+/* ==============================
+   판매
+============================== */
+
+function sellFish(id){
+
+    const amount=
+        currentUser.fishInventory[id]||0;
+
+    if(amount<=0)
+        return;
+
+    const f=
+        fish.find(x=>x.id===id);
+
+    if(!f)
+        return;
+
+    const stats=
+        getTotalStats();
+
+    const price=
+        Math.floor(
+            f.price*
+            amount*
+            (1+stats.sell/100)
+        );
+
+    currentUser.coins+=price;
+    currentUser.totalCoinsEarned+=price;
+
+    delete currentUser.fishInventory[id];
+
+    toast(
+        "💰 "+
+        price.toLocaleString()+
+        " 코인 획득!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+function sellAllFish(){
+
+    let total=0;
+
+    const stats=
+        getTotalStats();
+
+    for(const id in currentUser.fishInventory){
+
+        const amount=
+            currentUser.fishInventory[id];
+
+        const f=
+            fish.find(x=>x.id===id);
+
+        if(!f)
+            continue;
+
+        total+=
+            Math.floor(
+                f.price*
+                amount*
+                (1+stats.sell/100)
+            );
+
+    }
+
+    if(total<=0){
+
+        toast("판매할 물고기가 없습니다.");
+        return;
+
+    }
+
+    currentUser.coins+=total;
+    currentUser.totalCoinsEarned+=total;
+    currentUser.fishInventory={};
+
+    toast(
+        "💰 "+
+        total.toLocaleString()+
+        " 코인 획득!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+
+/* ==============================
+   장비
+============================== */
+
+function getEquipmentLimit(){
+
+    return Math.min(
+        8,
+        5+
+        Math.floor(
+            (currentUser.level-1)/20
+        )
+    );
+
+}
+
+function equipItem(id){
+
+    if(
+        currentUser.equippedItems.includes(id)
+    ){
+
+        toast("이미 장착되어 있습니다.");
+        return;
+
+    }
+
+    if(
+        currentUser.equippedItems.length>=
+        getEquipmentLimit()
+    ){
+
+        toast("장비 슬롯이 부족합니다.");
+        return;
+
+    }
+
+    if(
+        (currentUser.itemInventory[id]||0)<=0
+    ){
+
+        toast("아이템이 없습니다.");
+        return;
+
+    }
+
+    currentUser.equippedItems.push(id);
+
+    saveGame();
+    renderAll();
+
+    toast("💎 아이템 장착!");
+
+}
+
+function unequipItem(id){
+
+    const index=
+        currentUser.equippedItems.indexOf(id);
+
+    if(index===-1)
+        return;
+
+    currentUser.equippedItems.splice(
+        index,
+        1
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+
+/* ==============================
+   상점
+============================== */
+
+function buyRod(id){
+
+    const rod=
+        rods.find(x=>x.id===id);
+
+    if(!rod)
+        return;
+
+    if(
+        currentUser.ownedRods.includes(id)
+    ){
+
+        toast("이미 가지고 있습니다.");
+        return;
+
+    }
+
+    if(currentUser.coins<rod.price){
+
+        toast("코인이 부족합니다.");
+        return;
+
+    }
+
+    currentUser.coins-=rod.price;
+    currentUser.ownedRods.push(id);
+
+    toast(
+        rod.name+" 구매 완료!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+function buyLocation(id){
+
+    const loc=
+        locations.find(x=>x.id===id);
+
+    if(!loc)
+        return;
+
+    if(
+        currentUser.ownedLocations.includes(id)
+    ){
+
+        toast("이미 가지고 있습니다.");
+        return;
+
+    }
+
+    if(currentUser.coins<loc.price){
+
+        toast("코인이 부족합니다.");
+        return;
+
+    }
+
+    currentUser.coins-=loc.price;
+    currentUser.ownedLocations.push(id);
+
+    toast(
+        loc.name+" 구매 완료!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+function buyBait(id){
+
+    const bait=
+        baits.find(x=>x.id===id);
+
+    if(!bait)
+        return;
+
+    if(currentUser.coins<bait.price){
+
+        toast("코인이 부족합니다.");
+        return;
+
+    }
+
+    currentUser.coins-=bait.price;
+
+    currentUser.baitInventory[id]=
+        (currentUser.baitInventory[id]||0)+1;
+
+    toast(
+        bait.name+" 구매 완료!"
+    );
+
+    saveGame();
+    renderAll();
+
+}
+
+
+/* ==============================
+   송금
+============================== */
+
+function transferCoins(){
+
+    const targetId=
+        document.getElementById(
+            "transferTarget"
+        ).value;
+
+    const amount=
+        Number(
+            document.getElementById(
+                "transferAmount"
+            ).value
+        );
+
+    const accounts=getAccounts();
+
+    const target=accounts[targetId];
+
+    if(!target){
+
+        toast("받는 사람을 찾을 수 없습니다.");
+        return;
+
+    }
+
+    if(
+        !Number.isInteger(amount)||
+        amount<=0
+    ){
+
+        toast("올바른 금액을 입력해주세요.");
+        return;
+
+    }
+
+    if(currentUser.coins<amount){
+
+        toast("코인이 부족합니다.");
+        return;
+
+    }
+
+    if(targetId===currentAccountId){
+
+        toast("자기 자신에게 송금할 수 없습니다.");
+        return;
+
+    }
+
+    if(!target.game){
+
+        target.game=
+            defaultUser(target.nickname);
+
+    }
+
+    currentUser.coins-=amount;
+
+    target.game.coins+=amount;
+
+
+    if(!currentUser.transferHistory)
+        currentUser.transferHistory=[];
+
+    if(!target.game.transferHistory)
+        target.game.transferHistory=[];
+
+
+    currentUser.transferHistory.push({
+
+        type:"send",
+        target:target.nickname,
+        amount:amount,
+        time:Date.now()
+
+    });
+
+    target.game.transferHistory.push({
+
+        type:"receive",
+        target:currentUser.nickname,
+        amount:amount,
+        time:Date.now()
+
+    });
+
+
+    currentUser.transferHistory=
+        currentUser.transferHistory.slice(-50);
+
+    target.game.transferHistory=
+        target.game.transferHistory.slice(-50);
+
+
+    accounts[currentAccountId].game=
+        currentUser;
+
+    accounts[targetId].game=
+        target.game;
+
+    saveAccounts(accounts);
+
+    document.getElementById(
+        "transferAmount"
+    ).value="";
+
+    toast(
+        "💸 "+
+        target.nickname+
+        "에게 "+
+        amount.toLocaleString()+
+        " 코인을 송금했습니다!"
+    );
+
+    renderAll();
+
+}
+
+
+/* ==============================
+   전체 렌더링
+============================== */
+
+function renderAll(){
+
+    if(!currentUser)
+        return;
+
+    renderUserInfo();
+    renderHome();
+    renderFishing();
+    renderFishDex();
+    renderItemDex();
+    renderInventory();
+    renderEquipment();
+    renderShop();
+    renderRanking();
+    renderBattle();
+    renderTransfer();
+    renderAdmin();
+
+}
+
+
+/* ==============================
+   유저 정보
+============================== */
+
+function renderUserInfo(){
+
+    const el=
+        document.getElementById("userInfo");
+
+    el.innerHTML=`
+
+        👤 ${currentUser.nickname}
+
+        &nbsp; | &nbsp;
+
+        ⭐ Lv.${currentUser.level}
+
+        &nbsp; | &nbsp;
+
+        💰 ${currentUser.coins.toLocaleString()}
+
+    `;
+
+}
+
+
+/* ==============================
+   홈
+============================== */
+
+function renderHome(){
+
+    const s=getTotalStats();
+
+    document.getElementById("homeStats")
+        .innerHTML=`
+
+        <div class="stat">
+            🪙 코인
+            <div class="big">
+                ${currentUser.coins.toLocaleString()}
+            </div>
+        </div>
+
+        <div class="stat">
+            ⭐ 레벨
+            <div class="big">
+                ${currentUser.level}
+            </div>
+        </div>
+
+        <div class="stat">
+            🐟 잡은 물고기
+            <div class="big">
+                ${currentUser.totalFishCaught}
+            </div>
+        </div>
+
+        <div class="stat">
+            📖 물고기 도감
+            <div class="big">
+                ${currentUser.fishDiscovered.length}/${fish.length}
+            </div>
+        </div>
+
+        <div class="stat">
+            💎 아이템 도감
+            <div class="big">
+                ${currentUser.itemDiscovered.length}/${items.length}
+            </div>
+        </div>
+
+        <div class="stat">
+            ⚔️ 대결 승리
+            <div class="big">
+                ${currentUser.battleWins}
+            </div>
+        </div>
+
+    `;
+
+
+    const need=expRequired();
+
+    const percent=
+        Math.min(
+            100,
+            currentUser.exp/need*100
+        );
+
+    document.getElementById("expBar")
+        .style.width=
+        percent+"%";
+
+    document.getElementById("expText")
+        .textContent=
+        `${Math.floor(currentUser.exp)} / ${need} EXP`;
+
+
+    document.getElementById("stats")
+        .innerHTML=`
+
+        <div class="grid">
+
+            <div class="stat">
+                🍀 행운
+                <b>${s.luck.toFixed(2)}x</b>
+            </div>
+
+            <div class="stat">
+                ⚡ 낚시 속도
+                <b>+${s.speed}%</b>
+            </div>
+
+            <div class="stat">
+                💰 판매 가격
+                <b>+${s.sell}%</b>
+            </div>
+
+            <div class="stat">
+                💎 아이템 획득률
+                <b>+${s.item}%</b>
+            </div>
+
+            <div class="stat">
+                ⭐ 희귀 확률
+                <b>+${s.rare}%</b>
+            </div>
+
+            <div class="stat">
+                📈 경험치
+                <b>+${s.exp}%</b>
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==============================
+   낚시 UI
+============================== */
+
+function renderFishing(){
+
+    const rodSelect=
+        document.getElementById("rodSelect");
+
+    rodSelect.innerHTML=
+        currentUser.ownedRods
+        .map(id=>{
+
+            const rod=
+                rods.find(x=>x.id===id);
+
+            return`
+
+                <option
+                    value="${rod.id}"
+                    ${rod.id===currentUser.currentRod
+                    ?"selected":""}>
+                    ${rod.name}
+                </option>
+
+            `;
+
+        }).join("");
+
+
+    const locationSelect=
+        document.getElementById("locationSelect");
+
+    locationSelect.innerHTML=
+        currentUser.ownedLocations
+        .map(id=>{
+
+            const loc=
+                locations.find(x=>x.id===id);
+
+            return`
+
+                <option
+                    value="${loc.id}"
+                    ${loc.id===currentUser.currentLocation
+                    ?"selected":""}>
+                    ${loc.name}
+                </option>
+
+            `;
+
+        }).join("");
+
+
+    const baitSelect=
+        document.getElementById("baitSelect");
+
+    const baitIds=
+        Object.keys(
+            currentUser.baitInventory
+        ).filter(
+            id=>
+            currentUser.baitInventory[id]>0
+        );
+
+    baitSelect.innerHTML=
+        baitIds.map(id=>{
+
+            const bait=
+                baits.find(x=>x.id===id);
+
+            return`
+
+                <option
+                    value="${bait.id}"
+                    ${bait.id===currentUser.currentBait
+                    ?"selected":""}>
+                    ${bait.name}
+                    x${currentUser.baitInventory[id]}
+                </option>
+
+            `;
+
+        }).join("");
+
+
+    const rod=
+        rods.find(
+            x=>x.id===currentUser.currentRod
+        );
+
+    const loc=
+        locations.find(
+            x=>x.id===currentUser.currentLocation
+        );
+
+    const bait=
+        baits.find(
+            x=>x.id===currentUser.currentBait
+        );
+
+
+    document.getElementById("currentEquipment")
+        .innerHTML=`
+
+        🎣 ${rod.name}<br>
+        🌊 ${loc.name}<br>
+        🪱 ${bait.name}<br>
+        🍀 행운 물약:
+        ${currentUser.potionCount}개
+
+    `;
+
+    updateAutoStatus();
+
+}
+
+
+/* ==============================
+   물고기 도감
+============================== */
+
+function checkFishDexReward(){
+
+    if(!currentUser)
+        return;
+
+    if(currentUser.fishDexRewardClaimed)
+        return;
+
+    if(currentUser.fishDiscovered.length<fish.length)
+        return;
+
+    currentUser.fishDexRewardClaimed=true;
+
+    const coinReward=5000000;
+    const potionReward=10;
+
+    currentUser.coins+=coinReward;
+    currentUser.potionCount=(currentUser.potionCount||0)+potionReward;
+    currentUser.totalCoinsEarned+=coinReward;
+
+    toast(
+        "🏆 물고기 도감 100% 달성! "+
+        coinReward.toLocaleString()+
+        " 코인 + 행운 물약 "+
+        potionReward+
+        "개 획득!"
+    );
+
+    saveGame();
+
+}
+
+function renderFishDex(){
+
+    document.getElementById("fishDexCount")
+        .textContent=
+        `${currentUser.fishDiscovered.length} / ${fish.length} 발견`;
+
+
+    document.getElementById("fishDexGrid")
+        .innerHTML=
+        fish.map(f=>{
+
+            const discovered=
+                currentUser.fishDiscovered
+                    .includes(f.id);
+
+            return`
+
+                <div class="item">
+
+                    <h3 class="rarity r${f.tier}">
+                        ${
+                            discovered
+                            ?f.name
+                            :"???"
+                        }
+                    </h3>
+
+                    <p>
+                        ${
+                            discovered
+                            ?f.rarity
+                            :"미발견"
+                        }
+                    </p>
+
+                    ${
+                        discovered
+                        ?`
+                            <p>
+                                💰
+                                ${f.price.toLocaleString()}
+                            </p>
+                        `
+                        :""
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ==============================
+   아이템 도감
+============================== */
+
+function renderItemDex(){
+
+    document.getElementById("itemDexCount")
+        .textContent=
+        `${currentUser.itemDiscovered.length} / ${items.length} 발견`;
+
+
+    document.getElementById("itemDexGrid")
+        .innerHTML=
+        items.map(item=>{
+
+            const discovered=
+                currentUser.itemDiscovered
+                    .includes(item.id);
+
+            const abilities=
+                Object.entries(item.abilities)
+                .map(
+                    ([key,value])=>
+                    `${abilityNames[key]} +${value}%`
+                )
+                .join("<br>");
+
+
+            return`
+
+                <div class="item">
+
+                    <h3>
+                        ${
+                            discovered
+                            ?item.name
+                            :"???"
+                        }
+                    </h3>
+
+                    ${
+                        discovered
+                        ?`
+
+                            <p>
+                                ${abilities}
+                            </p>
+
+                            <p>
+                                💰
+                                ${item.price.toLocaleString()}
+                            </p>
+
+                        `
+                        :`
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        `
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ==============================
+   인벤토리
+============================== */
+
+function renderInventory(){
+
+    const fishInv=
+        document.getElementById("fishInventory");
+
+    const fishIds=
+        Object.keys(
+            currentUser.fishInventory
+        ).filter(
+            id=>
+            currentUser.fishInventory[id]>0
+        );
+
+
+    if(fishIds.length===0){
+
+        fishInv.innerHTML=
+            "<p>물고기가 없습니다.</p>";
+
+    }else{
+
+        fishInv.innerHTML=
+            fishIds.map(id=>{
+
+                const f=
+                    fish.find(x=>x.id===id);
+
+                const amount=
+                    currentUser.fishInventory[id];
+
+                return`
+
+                    <div class="item">
+
+                        <h3 class="rarity r${f.tier}">
+                            ${f.name}
+                        </h3>
+
+                        <p>
+                            ${f.rarity}
+                        </p>
+
+                        <p>
+                            x${amount}
+                        </p>
+
+                        <button
+                            class="success"
+                            onclick="sellFish('${id}')">
+                            판매
+                        </button>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+
+    const itemInv=
+        document.getElementById("itemInventory");
+
+    const itemIds=
+        Object.keys(
+            currentUser.itemInventory
+        ).filter(
+            id=>
+            currentUser.itemInventory[id]>0
+        );
+
+
+    if(itemIds.length===0){
+
+        itemInv.innerHTML=
+            "<p>아이템이 없습니다.</p>";
+
+    }else{
+
+        itemInv.innerHTML=
+            itemIds.map(id=>{
+
+                const item=
+                    items.find(x=>x.id===id);
+
+                const amount=
+                    currentUser.itemInventory[id];
+
+                const equipped=
+                    currentUser.equippedItems
+                        .includes(id);
+
+                return`
+
+                    <div class="item">
+
+                        <h3>
+                            ${item.name}
+                        </h3>
+
+                        <p>x${amount}</p>
+
+                        ${
+                            equipped
+                            ?"<p>🟢 장착 중</p>"
+                            :""
+                        }
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
+}
+
+
+/* ==============================
+   장비 UI
+============================== */
+
+function renderEquipment(){
+
+    const limit=
+        getEquipmentLimit();
+
+    document.getElementById("equipmentLimit")
+        .textContent=
+        `장착 슬롯:
+        ${currentUser.equippedItems.length}
+        / ${limit}`;
+
+
+    document.getElementById("equippedItems")
+        .innerHTML=
+        currentUser.equippedItems.length
+        ?
+        currentUser.equippedItems.map(id=>{
+
+            const item=
+                items.find(x=>x.id===id);
+
+            const abilities=
+                Object.entries(item.abilities)
+                .map(
+                    ([key,value])=>
+                    `${abilityNames[key]} +${value}%`
+                )
+                .join("<br>");
+
+
+            return`
+
+                <div class="item">
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <p>
+                        ${abilities}
+                    </p>
+
+                    <button
+                        class="danger"
+                        onclick="unequipItem('${id}')">
+                        장착 해제
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("")
+        :
+        "<p>장착한 아이템이 없습니다.</p>";
+
+
+    const available=
+        Object.keys(
+            currentUser.itemInventory
+        )
+        .filter(
+            id=>
+            currentUser.itemInventory[id]>0 &&
+            !currentUser.equippedItems.includes(id)
+        );
+
+
+    document.getElementById("equipItems")
+        .innerHTML=
+        available.length
+        ?
+        available.map(id=>{
+
+            const item=
+                items.find(x=>x.id===id);
+
+            const abilities=
+                Object.entries(item.abilities)
+                .map(
+                    ([key,value])=>
+                    `${abilityNames[key]} +${value}%`
+                )
+                .join("<br>");
+
+
+            return`
+
+                <div class="item">
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <p>
+                        x${currentUser.itemInventory[id]}
+                    </p>
+
+                    <p>
+                        ${abilities}
+                    </p>
+
+                    <button
+                        class="primary"
+                        onclick="equipItem('${id}')">
+                        장착
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("")
+        :
+        "<p>장착할 아이템이 없습니다.</p>";
+
+}
+
+
+/* ==============================
+   랜덤 상점
+============================== */
+
+function getRandomShopData(){
+
+    const saved=JSON.parse(
+        localStorage.getItem(RANDOM_SHOP_KEY)||"null"
+    );
+
+    if(
+        saved&&
+        saved.expiresAt>Date.now()&&
+        Array.isArray(saved.products)
+    ){
+        return saved;
+    }
+
+    return refreshRandomShop(false);
+
+}
+
+function randomFrom(list){
+
+    return list[
+        Math.floor(Math.random()*list.length)
+    ];
+
+}
+
+function createRandomShopProduct(){
+
+    const roll=Math.random()*100;
+
+    /* 낚싯대 18% */
+    if(roll<18){
+
+        const available=
+            rods.filter(r=>r.price>0);
+
+        const rod=randomFrom(available);
+
+        return{
+            type:"rod",
+            id:rod.id,
+            name:rod.name,
+            price:Math.max(
+                1,
+                Math.floor(rod.price*(0.75+Math.random()*0.35))
+            ),
+            originalPrice:rod.price,
+            luck:rod.luck
+        };
+
+    }
+
+    /* 낚시터 12% */
+    if(roll<30){
+
+        const available=
+            locations.filter(l=>l.price>0);
+
+        const loc=randomFrom(available);
+
+        return{
+            type:"location",
+            id:loc.id,
+            name:loc.name,
+            price:Math.max(
+                1,
+                Math.floor(loc.price*(0.75+Math.random()*0.35))
+            ),
+            originalPrice:loc.price,
+            luck:loc.luck
+        };
+
+    }
+
+    /* 미끼 25% */
+    if(roll<55){
+
+        const bait=randomFrom(baits.filter(b=>b.price>0));
+        const amount=[3,5,10][
+            Math.floor(Math.random()*3)
+        ];
+
+        return{
+            type:"bait",
+            id:bait.id,
+            name:bait.name+" ×"+amount,
+            price:Math.max(
+                1,
+                Math.floor(bait.price*amount*(0.8+Math.random()*0.25))
+            ),
+            originalPrice:bait.price*amount,
+            luck:bait.luck,
+            amount:amount
+        };
+
+    }
+
+    /* 행운 물약 15% */
+    if(roll<70){
+
+        const amount=[1,2,3,5][
+            Math.floor(Math.random()*4)
+        ];
+
+        return{
+            type:"potion",
+            id:"potion",
+            name:"행운 물약 ×"+amount,
+            price:1000*amount,
+            originalPrice:1000*amount,
+            amount:amount
+        };
+
+    }
+
+    /* 아이템 25% */
+    const item=randomFrom(items);
+
+    const discount=
+        0.65+Math.random()*0.35;
+
+    return{
+        type:"item",
+        id:item.id,
+        name:item.name,
+        price:Math.max(
+            1,
+            Math.floor(item.price*discount)
+        ),
+        originalPrice:item.price,
+        tier:item.tier
+    };
+
+}
+
+function refreshRandomShop(force){
+
+    const saved=JSON.parse(
+        localStorage.getItem(RANDOM_SHOP_KEY)||"null"
+    );
+
+    /* 수동 새로고침은 500,000 코인 */
+    if(force){
+
+        const refreshCost=500000;
+
+        if(!currentUser){
+            return;
+        }
+
+        if(currentUser.coins<refreshCost){
+            toast("💰 상점 새로고침에는 500,000 코인이 필요합니다.");
+            return;
+        }
+
+        currentUser.coins-=refreshCost;
+        saveGame();
+    }
+
+    if(
+        !force&&
+        saved&&
+        saved.expiresAt>Date.now()&&
+        Array.isArray(saved.products)
+    ){
+        return saved;
+    }
+
+    const products=[];
+    const used=new Set();
+
+    while(products.length<6){
+
+        const product=createRandomShopProduct();
+        const key=product.type+":"+product.id;
+
+        if(used.has(key))
+            continue;
+
+        used.add(key);
+        products.push(product);
+
+    }
+
+    const data={
+        products:products,
+        expiresAt:Date.now()+RANDOM_SHOP_REFRESH
+    };
+
+    localStorage.setItem(
+        RANDOM_SHOP_KEY,
+        JSON.stringify(data)
+    );
+
+    if(force){
+
+        toast("🎲 랜덤 상점 새로고침 완료! 500,000 코인이 사용되었습니다.");
+        renderAll();
+
+    }
+
+    return data;
+
+}
+
+function buyRandomShop(index){
+
+    const shop=getRandomShopData();
+    const product=shop.products[index];
+
+    if(!product){
+        toast("상품을 찾을 수 없습니다.");
+        return;
+    }
+
+    if(currentUser.coins<product.price){
+        toast("💰 코인이 부족합니다.");
+        return;
+    }
+
+    if(
+        product.type==="rod"&&
+        currentUser.ownedRods.includes(product.id)
+    ){
+        toast("이미 가지고 있는 낚싯대입니다.");
+        return;
+    }
+
+    if(
+        product.type==="location"&&
+        currentUser.ownedLocations.includes(product.id)
+    ){
+        toast("이미 가지고 있는 낚시터입니다.");
+        return;
+    }
+
+    currentUser.coins-=product.price;
+
+    if(product.type==="rod"){
+
+        currentUser.ownedRods.push(product.id);
+        toast("🎣 "+product.name+" 구매 완료!");
+
+    }else if(product.type==="location"){
+
+        currentUser.ownedLocations.push(product.id);
+        toast("🌊 "+product.name+" 구매 완료!");
+
+    }else if(product.type==="bait"){
+
+        currentUser.baitInventory[product.id]=
+            (currentUser.baitInventory[product.id]||0)+
+            product.amount;
+
+        toast("🪱 "+product.name+" 구매 완료!");
+
+    }else if(product.type==="potion"){
+
+        currentUser.potionCount+=product.amount;
+        toast("🍀 "+product.name+" 구매 완료!");
+
+    }else if(product.type==="item"){
+
+        currentUser.itemInventory[product.id]=
+            (currentUser.itemInventory[product.id]||0)+1;
+
+        if(!currentUser.itemDiscovered.includes(product.id)){
+            currentUser.itemDiscovered.push(product.id);
+        }
+
+        toast("💎 "+product.name+" 구매 완료!");
+
+    }
+
+    saveGame();
+    renderAll();
+
+}
+
+function renderRandomShop(){
+
+    const el=
+        document.getElementById("randomShop");
+
+    const timer=
+        document.getElementById("randomShopTimer");
+
+    if(!el||!timer)
+        return;
+
+    const shop=getRandomShopData();
+
+    const remaining=Math.max(
+        0,
+        shop.expiresAt-Date.now()
+    );
+
+    const minutes=Math.floor(
+        remaining/60000
+    );
+
+    const seconds=Math.floor(
+        (remaining%60000)/1000
+    );
+
+    timer.textContent=
+        "⏰ 다음 상점 갱신: "+
+        minutes+"분 "+
+        String(seconds).padStart(2,"0")+"초";
+
+    el.innerHTML=
+        shop.products.map((product,index)=>{
+
+            let icon="🎁";
+            let info="";
+
+            if(product.type==="rod"){
+                icon="🎣";
+                info="🍀 행운 "+product.luck+"x";
+            }else if(product.type==="location"){
+                icon="🌊";
+                info="🍀 행운 "+product.luck+"x";
+            }else if(product.type==="bait"){
+                icon="🪱";
+                info="🍀 행운 "+product.luck+"x";
+            }else if(product.type==="potion"){
+                icon="🍀";
+                info="60초 동안 행운 ×1.5";
+            }else if(product.type==="item"){
+                icon="💎";
+                info="⭐ 아이템 등급 "+product.tier;
+            }
+
+            const owned=
+                product.type==="rod"&&
+                currentUser.ownedRods.includes(product.id)
+                ||
+                product.type==="location"&&
+                currentUser.ownedLocations.includes(product.id);
+
+            const discount=
+                product.originalPrice>product.price
+                ?Math.round(
+                    (1-product.price/product.originalPrice)*100
+                )
+                :0;
+
+            return`
+
+                <div class="item">
+
+                    <h3>${icon} ${product.name}</h3>
+
+                    <p class="small">${info}</p>
+
+                    ${
+                        discount>0
+                        ?`<p>🔥 ${discount}% 할인</p>`
+                        :""
+                    }
+
+                    <p>
+                        💰
+                        <b>${product.price.toLocaleString()}</b>
+                        코인
+                    </p>
+
+                    ${
+                        product.originalPrice>product.price
+                        ?`<p class="small"><s>${product.originalPrice.toLocaleString()}</s> 코인</p>`
+                        :""
+                    }
+
+                    ${
+                        owned
+                        ?"<p>🟢 이미 보유 중</p>"
+                        :`
+                            <button
+                                class="primary"
+                                onclick="buyRandomShop(${index})">
+                                🛒 구매
+                            </button>
+                        `
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+/* ==============================
+   상점 UI
+============================== */
+
+function renderShop(){
+
+    renderRandomShop();
+
+    document.getElementById("rodShop")
+        .innerHTML=
+        rods.map(rod=>{
+
+            const owned=
+                currentUser.ownedRods
+                    .includes(rod.id);
+
+            return`
+
+                <div class="item">
+
+                    <h3>${rod.name}</h3>
+
+                    <p>
+                        🍀 행운 ${rod.luck}x
+                    </p>
+
+                    <p>
+                        💰
+                        ${rod.price.toLocaleString()}
+                    </p>
+
+                    ${
+                        owned
+                        ?"<p>🟢 보유 중</p>"
+                        :`
+                            <button
+                                class="primary"
+                                onclick="buyRod('${rod.id}')">
+                                구매
+                            </button>
+                        `
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    document.getElementById("locationShop")
+        .innerHTML=
+        locations.map(loc=>{
+
+            const owned=
+                currentUser.ownedLocations
+                    .includes(loc.id);
+
+            return`
+
+                <div class="item">
+
+                    <h3>${loc.name}</h3>
+
+                    <p>
+                        🍀 행운 ${loc.luck}x
+                    </p>
+
+                    <p>
+                        💰
+                        ${loc.price.toLocaleString()}
+                    </p>
+
+                    ${
+                        owned
+                        ?"<p>🟢 보유 중</p>"
+                        :`
+                            <button
+                                class="primary"
+                                onclick="buyLocation('${loc.id}')">
+                                구매
+                            </button>
+                        `
+                    }
+
+                </div>
+
+            `;
+
+        }).join("");
+
+
+    document.getElementById("baitShop")
+        .innerHTML=
+        baits.map(bait=>{
+
+            const amount=
+                currentUser.baitInventory[bait.id]||0;
+
+            return`
+
+                <div class="item">
+
+                    <h3>${bait.name}</h3>
+
+                    <p>
+                        🍀 행운 ${bait.luck}x
+                    </p>
+
+                    <p>
+                        💰
+                        ${bait.price.toLocaleString()}
+                    </p>
+
+                    <p>
+                        보유: ${amount}
+                    </p>
+
+                    <button
+                        class="primary"
+                        onclick="buyBait('${bait.id}')">
+                        구매
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+setInterval(()=>{
+
+    if(currentUser){
+        const shop=JSON.parse(
+            localStorage.getItem(RANDOM_SHOP_KEY)||"null"
+        );
+
+        if(!shop||shop.expiresAt<=Date.now()){
+            refreshRandomShop(false);
+        }
+
+        renderRandomShop();
+    }
+
+},1000);
+
+
+/* ==============================
+   랭킹
+============================== */
+
+/* ==============================
+   👑 관리자 시스템
+============================== */
+
+function getAdminTarget(){
+    if(!isAdmin()) return null;
+    const id=document.getElementById("adminTarget")?.value;
+    const accounts=getAccounts();
+    if(!id || !accounts[id]) return null;
+    return {id, account:accounts[id], game:accounts[id].game || defaultUser(accounts[id].nickname)};
+}
+
+function saveAdminTarget(target){
+    const accounts=getAccounts();
+    accounts[target.id].nickname=target.game.nickname;
+    accounts[target.id].game=target.game;
+    saveAccounts(accounts);
+}
+
+function adminAddCoins(){
+    const t=getAdminTarget(); const n=Math.floor(Number(document.getElementById("adminCoins").value));
+    if(!t || !Number.isFinite(n) || n<=0) return toast("지급할 코인을 입력해주세요.");
+    t.game.coins+=n; saveAdminTarget(t); toast(`💰 ${t.game.nickname}에게 ${n.toLocaleString()} 코인 지급!`); renderAll();
+}
+
+function adminRemoveCoins(){
+    const t=getAdminTarget(); const n=Math.floor(Number(document.getElementById("adminCoins").value));
+    if(!t || !Number.isFinite(n) || n<=0) return toast("차감할 코인을 입력해주세요.");
+    t.game.coins=Math.max(0,t.game.coins-n); saveAdminTarget(t); toast(`💸 ${t.game.nickname}의 코인 ${n.toLocaleString()} 차감!`); renderAll();
+}
+
+function adminSetLevel(){
+    const t=getAdminTarget(); const n=Math.floor(Number(document.getElementById("adminLevel").value));
+    if(!t || !Number.isFinite(n) || n<1) return toast("올바른 레벨을 입력해주세요.");
+    t.game.level=n; t.game.exp=0; saveAdminTarget(t); toast(`⭐ ${t.game.nickname} 레벨을 ${n}로 설정했습니다.`); renderAll();
+}
+
+function adminAddExp(){
+    const t=getAdminTarget(); const n=Math.floor(Number(document.getElementById("adminExp").value));
+    if(!t || !Number.isFinite(n) || n<=0) return toast("지급할 EXP를 입력해주세요.");
+    t.game.exp+=n;
+    while(t.game.exp>=expRequired()) { t.game.exp-=expRequired(); t.game.level++; }
+    saveAdminTarget(t); toast(`📈 ${t.game.nickname}에게 ${n.toLocaleString()} EXP 지급!`); renderAll();
+}
+
+function adminGiveItem(){
+    const t=getAdminTarget(); const id=document.getElementById("adminItem").value; const n=Math.floor(Number(document.getElementById("adminItemCount").value));
+    if(!t || !id || !Number.isFinite(n) || n<=0) return toast("아이템 수량을 확인해주세요.");
+    t.game.itemInventory[id]=(t.game.itemInventory[id]||0)+n;
+    if(!t.game.itemDiscovered.includes(id)) t.game.itemDiscovered.push(id);
+    saveAdminTarget(t); toast(`🎁 ${t.game.nickname}에게 아이템 ${n}개 지급!`); renderAll();
+}
+
+function adminGiveRod(){
+    const t=getAdminTarget(); const id=document.getElementById("adminRod").value;
+    if(!t || !id) return;
+    if(!t.game.ownedRods.includes(id)) t.game.ownedRods.push(id);
+    saveAdminTarget(t); toast(`🎣 ${t.game.nickname}에게 낚싯대 지급!`); renderAll();
+}
+
+function adminGiveLocation(){
+    const t=getAdminTarget(); const id=document.getElementById("adminLocation").value;
+    if(!t || !id) return;
+    if(!t.game.ownedLocations.includes(id)) t.game.ownedLocations.push(id);
+    saveAdminTarget(t); toast(`🌊 ${t.game.nickname}에게 낚시터 지급!`); renderAll();
+}
+
+function adminGiveBait(){
+    const t=getAdminTarget(); const id=document.getElementById("adminBait").value; const n=Math.floor(Number(document.getElementById("adminBaitCount").value));
+    if(!t || !id || !Number.isFinite(n) || n<=0) return toast("미끼 수량을 확인해주세요.");
+    t.game.baitInventory[id]=(t.game.baitInventory[id]||0)+n;
+    saveAdminTarget(t); toast(`🪱 ${t.game.nickname}에게 미끼 ${n}개 지급!`); renderAll();
+}
+
+function adminRefreshShop(){
+    if(!isAdmin()) return toast("관리자만 사용할 수 있습니다.");
+    const saved=JSON.parse(localStorage.getItem(RANDOM_SHOP_KEY)||"null");
+    const products=[]; const used=new Set();
+    while(products.length<6){ const product=createRandomShopProduct(); const key=product.type+":"+product.id; if(used.has(key)) continue; used.add(key); products.push(product); }
+    localStorage.setItem(RANDOM_SHOP_KEY,JSON.stringify({products,expiresAt:Date.now()+RANDOM_SHOP_REFRESH}));
+    toast("👑 관리자 무료 랜덤 상점 새로고침 완료!"); renderAll();
+}
+
+function adminNoticeSend(){
+    if(!isAdmin()) return toast("관리자만 사용할 수 있습니다.");
+    const msg=document.getElementById("adminNotice").value.trim();
+    if(!msg) return toast("공지 내용을 입력해주세요.");
+    toast("📢 관리자 공지: "+msg);
+    document.getElementById("adminNotice").value="";
+}
+
+function renderAdmin(){
+    const nav=document.getElementById("adminNavButton");
+    if(nav) nav.classList.toggle("hidden",!isAdmin());
+    const page=document.getElementById("admin");
+    if(!page || !isAdmin()) return;
+
+    const accounts=getAccounts();
+    const target=document.getElementById("adminTarget");
+    const previous=target.value;
+    target.innerHTML=Object.keys(accounts).map(id=>`<option value="${id}">${accounts[id].nickname||id} (${id})</option>`).join("");
+    if(accounts[previous]) target.value=previous;
+
+    document.getElementById("adminItem").innerHTML=items.map(x=>`<option value="${x.id}">${x.name} · ${x.tier}등급</option>`).join("");
+    document.getElementById("adminRod").innerHTML=rods.map(x=>`<option value="${x.id}">${x.name}</option>`).join("");
+    document.getElementById("adminLocation").innerHTML=locations.map(x=>`<option value="${x.id}">${x.name}</option>`).join("");
+    document.getElementById("adminBait").innerHTML=baits.map(x=>`<option value="${x.id}">${x.name}</option>`).join("");
+    document.getElementById("adminList").innerHTML=ADMIN_NAMES.map(x=>`👑 <b>${x}</b>`).join("<br>");
+}
+
+function renderRanking(){
+
+    const accounts=
+        Object.values(getAccounts());
+
+    accounts.sort((a,b)=>{
+
+        const ag=
+            a.game||
+            defaultUser(a.nickname);
+
+        const bg=
+            b.game||
+            defaultUser(b.nickname);
+
+        if(bg.level!==ag.level)
+            return bg.level-ag.level;
+
+        if(bg.battleWins!==ag.battleWins)
+            return bg.battleWins-ag.battleWins;
+
+        return bg.coins-ag.coins;
+
+    });
+
+
+    const top=
+        accounts.slice(0,50);
+
+
+    document.getElementById("rankingTable")
+        .innerHTML=`
+
+        <table>
+
+            <tr>
+                <th>순위</th>
+                <th>닉네임</th>
+                <th>레벨</th>
+                <th>대결 승리</th>
+                <th>코인</th>
+            </tr>
+
+            ${
+                top.map((account,index)=>{
+
+                    const g=
+                        account.game||
+                        defaultUser(
+                            account.nickname
+                        );
+
+                    return`
+
+                        <tr>
+
+                            <td>${index+1}</td>
+
+                            <td>${g.nickname}</td>
+
+                            <td>Lv.${g.level}</td>
+
+                            <td>${g.battleWins}</td>
+
+                            <td>
+                                ${g.coins.toLocaleString()}
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }).join("")
+            }
+
+        </table>
+
+    `;
+
+}
+
+
+/* ==============================
+   대결
+============================== */
+
+let battle=null;
+let battleTimer=null;
+
+function renderBattle(){
+
+    const accounts=getAccounts();
+
+    const select=
+        document.getElementById(
+            "opponentSelect"
+        );
+
+    const opponents=
+        Object.entries(accounts)
+        .filter(
+            ([id])=>
+            id!==currentAccountId
+        );
+
+
+    if(opponents.length===0){
+
+        select.innerHTML=
+            "<option>대결할 다른 계정이 없습니다.</option>";
+
+    }else{
+
+        select.innerHTML=
+            opponents.map(
+                ([id,account])=>`
+                    <option value="${id}">
+                        ${account.nickname}
+                    </option>
+                `
+            ).join("");
+
+    }
+
+
+    document.getElementById("battleStats")
+        .innerHTML=`
+
+        🏆 승리:
+        ${currentUser.battleWins}
+
+        &nbsp;&nbsp;
+
+        ❌ 패배:
+        ${currentUser.battleLosses}
+
+        &nbsp;&nbsp;
+
+        🤝 무승부:
+        ${currentUser.battleDraws}
+
+    `;
+
+
+    const history=
+        currentUser.battleHistory||[];
+
+
+    document.getElementById("battleHistory")
+        .innerHTML=
+        history.length
+        ?
+        history.slice().reverse()
+        .map(h=>`
+
+            <div class="item">
+
+                ${h.result}
+                · 상대: ${h.opponent}
+                · ${h.myScore.toLocaleString()}
+                :
+                ${h.enemyScore.toLocaleString()}
+
+            </div>
+
+        `).join("")
+        :
+        "<p>대결 기록이 없습니다.</p>";
+
+}
+
+
+function startBattle(){
+
+    if(battle&&battle.active){
+
+        toast("이미 대결 중입니다.");
+        return;
+
+    }
+
+    const opponentId=
+        document.getElementById(
+            "opponentSelect"
+        ).value;
+
+    const accounts=getAccounts();
+
+    const opponent=
+        accounts[opponentId];
+
+    if(!opponent){
+
+        toast("상대를 찾을 수 없습니다.");
+        return;
+
+    }
+
+
+    battle={
+
+        opponentId:opponentId,
+
+        opponentName:
+            opponent.nickname,
+
+        opponentUser:
+            JSON.parse(
+                JSON.stringify(
+                    opponent.game||
+                    defaultUser(
+                        opponent.nickname
+                    )
+                )
+            ),
+
+        myScore:0,
+        enemyScore:0,
+
+        myFish:null,
+        enemyFish:null,
+
+        time:30,
+
+        active:true
+
+    };
+
+
+    document.getElementById(
+        "battleStartArea"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "battleArea"
+    ).classList.remove("hidden");
+
+    document.getElementById(
+        "battleResult"
+    ).classList.add("hidden");
+
+
+    updateBattleUI();
+
+
+    battleTimer=
+        setInterval(()=>{
+
+            if(!battle||!battle.active)
+                return;
+
+            battle.time--;
+
+            updateBattleUI();
+
+            if(battle.time<=0){
+
+                finishBattle();
+
+            }
+
+        },1000);
+
+}
+
+
+function getOpponentLuck(){
+
+    const g=
+        battle.opponentUser;
+
+    const rod=
+        rods.find(
+            x=>x.id===g.currentRod
+        )||rods[0];
+
+    const loc=
+        locations.find(
+            x=>x.id===g.currentLocation
+        )||locations[0];
+
+    const bait=
+        baits.find(
+            x=>x.id===g.currentBait
+        )||baits[0];
+
+    return rod.luck*
+        loc.luck*
+        bait.luck;
+
+}
+
+
+function battleCatch(){
+
+    if(!battle||!battle.active)
+        return;
+
+
+    const myFish=
+        getRandomFish();
+
+    battle.myFish=
+        myFish;
+
+    battle.myScore+=
+        myFish.price;
+
+
+    const enemyFish=
+        getRandomFishForLuck(
+            getOpponentLuck()
+        );
+
+    battle.enemyFish=
+        enemyFish;
+
+    battle.enemyScore+=
+        enemyFish.price;
+
+
+    updateBattleUI();
+
+}
+
+
+function updateBattleUI(){
+
+    if(!battle)
+        return;
+
+    document.getElementById(
+        "battleTimer"
+    ).textContent=
+        battle.time+"초";
+
+    document.getElementById(
+        "myBattleScore"
+    ).textContent=
+        battle.myScore.toLocaleString();
+
+    document.getElementById(
+        "enemyBattleScore"
+    ).textContent=
+        battle.enemyScore.toLocaleString();
+
+    document.getElementById(
+        "myBattleFish"
+    ).textContent=
+        battle.myFish
+        ?"🐟 "+battle.myFish.name
+        :"";
+
+    document.getElementById(
+        "enemyBattleFish"
+    ).textContent=
+        battle.enemyFish
+        ?"🐟 "+battle.enemyFish.name
+        :"";
+
+}
+
+
+function finishBattle(){
+
+    if(!battle||!battle.active)
+        return;
+
+    battle.active=false;
+
+    clearInterval(battleTimer);
+
+    battleTimer=null;
+
+    let result="";
+
+
+    if(
+        battle.myScore>
+        battle.enemyScore
+    ){
+
+        result="🏆 승리";
+
+        currentUser.battleWins++;
+
+        const reward=
+            Math.max(
+                500,
+                Math.floor(
+                    (battle.enemyScore+100)/10
+                )
+            );
+
+        currentUser.coins+=reward;
+        currentUser.totalCoinsEarned+=reward;
+
+        toast(
+            "🏆 승리! "+
+            reward.toLocaleString()+
+            " 코인 획득!"
+        );
+
+    }else if(
+        battle.myScore<
+        battle.enemyScore
+    ){
+
+        result="❌ 패배";
+
+        currentUser.battleLosses++;
+
+        toast("❌ 대결에서 패배했습니다.");
+
+    }else{
+
+        result="🤝 무승부";
+
+        currentUser.battleDraws++;
+
+        toast("🤝 무승부!");
+
+    }
+
+
+    currentUser.battlePlayed++;
+
+
+    if(!currentUser.battleHistory)
+        currentUser.battleHistory=[];
+
+
+    currentUser.battleHistory.push({
+
+        opponent:battle.opponentName,
+
+        myScore:battle.myScore,
+
+        enemyScore:battle.enemyScore,
+
+        result:result,
+
+        time:Date.now()
+
+    });
+
+
+    currentUser.battleHistory=
+        currentUser.battleHistory.slice(-50);
+
+
+    const accounts=getAccounts();
+
+    const opponent=
+        accounts[battle.opponentId];
+
+
+    if(opponent){
+
+        if(!opponent.game)
+            opponent.game=
+                defaultUser(
+                    opponent.nickname
+                );
+
+
+        opponent.game.battlePlayed++;
+
+
+        if(result==="🏆 승리")
+            opponent.game.battleLosses++;
+
+        else if(result==="❌ 패배")
+            opponent.game.battleWins++;
+
+        else
+            opponent.game.battleDraws++;
+
+
+        if(!opponent.game.battleHistory)
+            opponent.game.battleHistory=[];
+
+
+        opponent.game.battleHistory.push({
+
+            opponent:
+                currentUser.nickname,
+
+            myScore:
+                battle.enemyScore,
+
+            enemyScore:
+                battle.myScore,
+
+            result:
+                result==="🏆 승리"
+                ?"❌ 패배"
+                :
+                result==="❌ 패배"
+                ?"🏆 승리"
+                :
+                "🤝 무승부",
+
+            time:Date.now()
+
+        });
+
+
+        opponent.game.battleHistory=
+            opponent.game.battleHistory.slice(-50);
+
+    }
+
+
+    saveAccounts(accounts);
+
+    saveGame();
+
+
+    document.getElementById(
+        "battleArea"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "battleStartArea"
+    ).classList.remove("hidden");
+
+
+    const resultBox=
+        document.getElementById(
+            "battleResult"
+        );
+
+    resultBox.classList.remove("hidden");
+
+
+    resultBox.innerHTML=`
+
+        <h2>${result}</h2>
+
+        <p>
+            ${currentUser.nickname}
+            :
+            ${battle.myScore.toLocaleString()}
+        </p>
+
+        <p>
+            ${battle.opponentName}
+            :
+            ${battle.enemyScore.toLocaleString()}
+        </p>
+
+    `;
+
+
+    battle=null;
+
+    renderAll();
+
+}
+
+
+/* ==============================
+   송금 UI
+============================== */
+
+function renderTransfer(){
+
+    const accounts=getAccounts();
+
+    const select=
+        document.getElementById(
+            "transferTarget"
+        );
+
+    if(!select)
+        return;
+
+
+    const targets=
+        Object.entries(accounts)
+        .filter(
+            ([id])=>
+            id!==currentAccountId
+        );
+
+
+    if(targets.length===0){
+
+        select.innerHTML=
+            "<option>송금할 계정이 없습니다.</option>";
+
+    }else{
+
+        select.innerHTML=
+            targets.map(
+                ([id,account])=>`
+                    <option value="${id}">
+                        ${account.nickname}
+                    </option>
+                `
+            ).join("");
+
+    }
+
+
+    document.getElementById(
+        "transferMyCoins"
+    ).textContent=
+        currentUser.coins.toLocaleString();
+
+
+    const history=
+        currentUser.transferHistory||[];
+
+
+    document.getElementById(
+        "transferHistory"
+    ).innerHTML=
+        history.length
+        ?
+        history.slice().reverse()
+        .map(h=>`
+
+            <div class="item">
+
+                ${
+                    h.type==="send"
+                    ?"📤 보냄"
+                    :"📥 받음"
+                }
+
+                · ${h.target}
+
+                · ${h.amount.toLocaleString()} 코인
+
+            </div>
+
+        `).join("")
+        :
+        "<p>송금 내역이 없습니다.</p>";
+
+}
+
+
+/* ==============================
+   알림
+============================== */
+
+function toast(message){
+
+    const el=
+        document.getElementById("toast");
+
+    el.textContent=message;
+
+    el.style.display="block";
+
+    clearTimeout(toast.timer);
+
+    toast.timer=
+        setTimeout(()=>{
+
+            el.style.display="none";
+
+        },2500);
+
+}
+
+/* ==============================
+   🎲 베팅 시스템
+============================== */
+
+const BET_OPTIONS = [
+    { amount: 1.5, winRate: 50 },
+    { amount: 6,   winRate: 40 },
+    { amount: 12,  winRate: 30 },
+    { amount: 20,  winRate: 22 },
+    { amount: 28,  winRate: 16 },
+    { amount: 40,  winRate: 10 },
+    { amount: 70,  winRate: 5 },
+    { amount: 100, winRate: 2 }
+];
+
+function placeBet(amount){
+
+    const bet = BET_OPTIONS.find(x => x.amount === amount);
+
+    if(!bet){
+        toast("올바른 베팅 금액이 아닙니다.");
+        return;
+    }
+
+    if(currentUser.coins < amount){
+        toast("💰 코인이 부족합니다.");
+        return;
+    }
+
+    currentUser.coins -= amount;
+
+    const win = Math.random() * 100 < bet.winRate;
+
+    if(win){
+
+        const reward = amount * 2;
+
+        currentUser.coins += reward;
+        currentUser.totalCoinsEarned += reward;
+
+        toast(
+            "🎉 베팅 성공! +" +
+            reward.toLocaleString() +
+            " 코인"
+        );
+
+    }else{
+
+        toast(
+            "❌ 베팅 실패! -" +
+            amount.toLocaleString() +
+            " 코인"
+        );
+
+    }
+
+    saveGame();
+    renderAll();
+}
+
+
+
+/* ==============================
+   자동 로그인
+============================== */
+
+function autoLogin(){
+
+    const id=
+        localStorage.getItem(LOGIN_KEY);
+
+    if(!id)
+        return;
+
+    const accounts=getAccounts();
+
+    if(!accounts[id])
+        return;
+
+    currentAccountId=id;
+
+    currentUser=
+        accounts[id].game||
+        defaultUser(
+            accounts[id].nickname
+        );
+
+    openGame();
+
+}
+
+
+/* ==============================
+   자동 저장
+============================== */
+
+setInterval(
+    saveGame,
+    10000
+);
+
+
+/* 실행 */
+
+autoLogin();
+
+
+</script>
+
+</body>
+</html>
