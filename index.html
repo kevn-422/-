@@ -156,17 +156,31 @@ th,td{
 
 <div id="toast"></div>
 
-<!-- 닉네임 입장 -->
+<!-- 로그인 -->
 <div id="authPage" class="container auth">
     <div class="card">
         <h1 class="center">🎣 낚시왕</h1>
-        <p class="center small">닉네임만 입력하고 바로 게임을 시작하세요!</p>
+        <p class="center small">200종의 물고기를 잡고 최고의 낚시왕이 되어보세요!</p>
 
-        <input id="loginNick" maxlength="20" placeholder="닉네임을 입력하세요"
-               onkeydown="if(event.key==='Enter') enterGame()">
+        <input id="loginId" placeholder="아이디">
+        <input id="loginPw" type="password" placeholder="비밀번호">
 
-        <button class="primary" style="width:100%" onclick="enterGame()">🎣 게임 시작</button>
-        <p class="small center">기존에 사용한 닉네임이면 기존 게임 데이터가 그대로 불러와집니다.</p>
+        <button class="primary" style="width:100%" onclick="login()">로그인</button>
+        <button style="width:100%" onclick="showSignup()">회원가입</button>
+    </div>
+</div>
+
+<!-- 회원가입 -->
+<div id="signupPage" class="container auth hidden">
+    <div class="card">
+        <h2>🎣 회원가입</h2>
+
+        <input id="signupId" placeholder="아이디">
+        <input id="signupNick" placeholder="닉네임">
+        <input id="signupPw" type="password" placeholder="비밀번호">
+
+        <button class="success" style="width:100%" onclick="signup()">회원가입</button>
+        <button style="width:100%" onclick="showLogin()">돌아가기</button>
     </div>
 </div>
 
@@ -271,7 +285,7 @@ th,td{
             <h2>⚔️ 2인 낚시 대결</h2>
 
             <p class="small">
-                같은 브라우저에 닉네임으로 입장한 다른 유저와 대결합니다.
+                같은 브라우저에 가입된 다른 계정과 대결합니다.
                 한 판은 30초입니다.
             </p>
 
@@ -327,32 +341,53 @@ th,td{
 
     </section>
 
-   <!-- 기부 -->
-<section id="transfer" class="page hidden">
+    <!-- 송금 -->
+    <section id="transfer" class="page hidden">
 
-    <div class="card">
-        <h2>🎁 코인 기부</h2>
+        <div class="card">
+            <h2>💸 코인 송금</h2>
 
-        <p>
-            현재 보유 코인:
-            <b id="transferMyCoins">0</b>
-        </p>
+            <p>
+                현재 보유 코인:
+                <b id="transferMyCoins">0</b>
+            </p>
 
-        <label>기부할 코인</label>
-        <input
-            id="transferAmount"
-            type="number"
-            min="1"
-            placeholder="기부할 코인">
+            <label>받는 사람</label>
+            <select id="transferTarget"></select>
 
-        <button
-            class="primary"
-            style="width:100%"
-            onclick="donateCoins()">
-            🎁 기부하기
-        </button>
-    </div>
-</section>
+            <label>송금할 코인</label>
+            <input
+                id="transferAmount"
+                type="number"
+                min="1"
+                placeholder="송금할 코인">
+
+            <button
+                class="primary"
+                style="width:100%"
+                onclick="transferCoins()">
+                💸 송금하기
+            </button>
+        </div>
+
+        <div class="card">
+            <h2>📜 송금 내역</h2>
+            <div id="transferHistory"></div>
+        </div>
+
+    </section>
+
+    <!-- 물고기 도감 -->
+    <section id="fishdex" class="page hidden">
+
+        <div class="card">
+            <h2>🐟 물고기 도감</h2>
+            <p id="fishDexCount"></p>
+
+            <div id="fishDexGrid" class="grid"></div>
+        </div>
+
+    </section>
 
     <!-- 아이템 도감 -->
     <section id="itemdex" class="page hidden">
@@ -535,6 +570,7 @@ th,td{
 ============================== */
 
 const ACCOUNT_KEY="fishingKing_accounts";
+const LOGIN_KEY="fishingKing_currentAccount";
 const RANDOM_SHOP_KEY="fishingKing_randomShop";
 const RANDOM_SHOP_REFRESH=30*60*1000;
 
@@ -543,7 +579,7 @@ const RANDOM_SHOP_REFRESH=30*60*1000;
    아이디 또는 닉네임을 여기에 추가하세요.
 ============================== */
 const ADMIN_NAMES=[
-    "Kevin12" , "우파루파ㅣ맨금" , "Kevinb_123", "디아" , "Geon7"
+    "건","Kevinb1213046"
 ];
 
 function isAdmin(){
@@ -606,90 +642,7 @@ const fishNames=[
 "무한룡","절대룡","초월룡","미지룡","신의 사자","세계의 수호어","세계의 파괴어","세계의 창조어","최후의 왕","궁극의 물고기",
 
 "심연의 물고기","태양룡어","달빛룡어","별빛룡어","은하의 지배자","성운의 지배자","우주룡","차원룡왕","시간룡왕","공간룡왕",
-"창조신어","파괴신어","영원신어","무한신어",
-
-/* ⭐ 10등급 태초 */
-"태초룡왕","태초신룡","태초의 해신","태초의 용왕","태초의 심해왕",
-"태초의 우주어","태초의 은하어","태초의 성운어","태초의 차원어","태초의 시간어",
-"태초의 공간어","태초의 창조어","태초의 파괴어","태초의 혼돈어","태초의 질서어",
-"태초의 영원어","태초의 무한어","태초의 궁극어","태초의 절대어","태초의 미지어",
-"태초의 신어","태초의 왕어","태초의 지배자","태초의 수호자","태초의 파괴자",
-"태초의 창조신","태초의 파괴신","태초의 시간신","태초의 공간신","태초의 차원신",
-"태초의 우주신","태초의 은하신","태초의 성운신","태초의 별신","태초의 태양신",
-"태초의 달신","태초의 심연신","태초의 바다신","태초의 폭풍신","태초의 번개신",
-"태초의 불꽃신","태초의 얼음신","태초의 빛신","태초의 어둠신","태초의 혼돈신",
-"태초의 질서신","태초의 영원신","태초의 무한신","태초의 궁극신","태초의 절대신",
-"태초의 세계왕","태초의 우주왕","태초의 차원왕","태초의 시간왕","태초의 공간왕",
-"태초의 심연왕","태초의 바다왕","태초의 폭풍왕","태초의 신계왕","태초의 천계왕",
-"태초의 마계왕","태초의 용왕신","태초의 해신왕","태초의 심해룡","태초의 우주룡",
-"태초의 차원룡","태초의 시간룡","태초의 공간룡","태초의 은하룡","태초의 성운룡",
-"태초의 세계룡","태초의 창조룡왕","태초의 파괴룡왕","태초의 영원룡왕","태초의 무한룡왕",
-
-/* 👑 11등급 천상 */
-"천상의 용왕","천상의 신룡","천상의 해신","천상의 심해왕","천상의 우주왕",
-"천상의 은하왕","천상의 성운왕","천상의 차원왕","천상의 시간왕","천상의 공간왕",
-"천상의 세계왕","천상의 창조왕","천상의 파괴왕","천상의 영원왕","천상의 무한왕",
-"천상의 궁극왕","천상의 절대왕","천상의 미지왕","천상의 신왕","천상의 수호왕",
-"천상의 파괴신","천상의 창조신","천상의 시간신","천상의 공간신","천상의 차원신",
-"천상의 우주신","천상의 은하신","천상의 성운신","천상의 태양신","천상의 달신",
-"천상의 별신","천상의 심연신","천상의 바다신","천상의 폭풍신","천상의 번개신",
-"천상의 불꽃신","천상의 얼음신","천상의 빛신","천상의 어둠신","천상의 혼돈신",
-"천상의 질서신","천상의 영원신","천상의 무한신","천상의 궁극신","천상의 절대신",
-"천상룡","천상룡왕","천상신룡왕","천상세계룡","천상우주룡",
-"천상차원룡","천상시간룡","천상공간룡","천상은하룡","천상성운룡",
-"천상심연룡","천상바다룡","천상폭풍룡","천상번개룡","천상불꽃룡",
-"천상얼음룡","천상빛의룡","천상어둠룡","천상혼돈룡","천상질서룡",
-"천상영원룡","천상무한룡","천상궁극룡","천상절대룡","천상미지룡",
-
-/* 💠 12등급 절대 */
-"절대신룡","절대용왕","절대해신","절대심해왕","절대우주왕",
-"절대은하왕","절대성운왕","절대차원왕","절대시간왕","절대공간왕",
-"절대세계왕","절대창조왕","절대파괴왕","절대영원왕","절대무한왕",
-"절대궁극왕","절대미지왕","절대신왕","절대수호왕","절대파괴신",
-"절대창조신","절대시간신","절대공간신","절대차원신","절대우주신",
-"절대은하신","절대성운신","절대태양신","절대달신","절대별신",
-"절대심연신","절대바다신","절대폭풍신","절대번개신","절대불꽃신",
-"절대얼음신","절대빛신","절대어둠신","절대혼돈신","절대질서신",
-"절대영원신","절대무한신","절대궁극신","절대세계신","절대우주룡",
-"절대차원룡","절대시간룡","절대공간룡","절대은하룡","절대성운룡",
-"절대심연룡","절대바다룡","절대폭풍룡","절대번개룡","절대불꽃룡",
-"절대얼음룡","절대빛룡","절대어둠룡","절대혼돈룡","절대질서룡",
-"절대영원룡","절대무한룡","절대궁극룡","절대세계룡","절대신룡왕",
-"절대천상룡","절대태초룡","절대창조룡","절대파괴룡","절대영원룡왕",
-"절대무한룡왕","절대차원룡왕","절대시간룡왕","절대공간룡왕","절대우주룡왕",
-
-/* 🌠 13등급 미지 */
-"미지의 신룡","미지의 용왕","미지의 해신","미지의 심해왕","미지의 우주왕",
-"미지의 은하왕","미지의 성운왕","미지의 차원왕","미지의 시간왕","미지의 공간왕",
-"미지의 세계왕","미지의 창조왕","미지의 파괴왕","미지의 영원왕","미지의 무한왕",
-"미지의 궁극왕","미지의 절대왕","미지의 신왕","미지의 수호왕","미지의 파괴신",
-"미지의 창조신","미지의 시간신","미지의 공간신","미지의 차원신","미지의 우주신",
-"미지의 은하신","미지의 성운신","미지의 태양신","미지의 달신","미지의 별신",
-"미지의 심연신","미지의 바다신","미지의 폭풍신","미지의 번개신","미지의 불꽃신",
-"미지의 얼음신","미지의 빛신","미지의 어둠신","미지의 혼돈신","미지의 질서신",
-"미지의 영원신","미지의 무한신","미지의 궁극신","미지의 절대신","미지룡왕",
-"미지신룡왕","미지세계룡","미지우주룡","미지차원룡","미지시간룡",
-"미지공간룡","미지은하룡","미지성운룡","미지심연룡","미지바다룡",
-"미지폭풍룡","미지번개룡","미지불꽃룡","미지얼음룡","미지빛룡",
-"미지어둠룡","미지혼돈룡","미지질서룡","미지영원룡","미지무한룡",
-"미지궁극룡","미지절대룡","미지세계신룡","미지우주신룡","미지차원신룡",
-
-/* 🌌 최상위 13등급 */
-"무명의 신","태초의 절대자","천상의 절대자","절대의 절대자","미지의 절대자",
-"세계의 끝","우주의 끝","차원의 끝","시간의 끝","공간의 끝",
-"영원의 끝","무한의 끝","창조의 근원","파괴의 근원","혼돈의 근원",
-"질서의 근원","시간의 근원","공간의 근원","차원의 근원","우주의 근원",
-"세계의 근원","태초의 근원","신의 근원","심연의 근원","바다의 근원",
-"용의 근원","빛의 근원","어둠의 근원","별의 근원","은하의 근원",
-"성운의 근원","천상의 근원","절대의 근원","미지의 근원","궁극의 근원",
-"영원의 지배자","무한의 지배자","절대의 지배자","미지의 지배자","태초의 지배자",
-"천상의 지배자","세계의 지배자","우주의 지배자","차원의 지배자","시간의 지배자",
-"공간의 지배자","창조의 지배자","파괴의 지배자","혼돈의 지배자","질서의 지배자",
-"심연의 지배자","바다의 지배자","별의 지배자","은하의 지배자","성운의 지배자",
-"신들의 지배자","용들의 지배자","세계의 신","우주의 신","차원의 신",
-"시간의 신","공간의 신","창조의 신","파괴의 신","혼돈의 신",
-"질서의 신","영원의 신","무한의 신","절대의 신","미지의 신",
-"태초의 신","천상의 신","궁극의 신","심연의 신","바다의 신"
+"창조신어","파괴신어","영원신어","무한신어"
 ];
 
 const fish=fishNames.map((name,index)=>{
@@ -1018,126 +971,142 @@ let currentAccountId=null;
 
 
 /* ==============================
-   닉네임 입장 시스템
-   - 아이디/비밀번호/회원가입 없음
-   - 기존 계정 데이터가 있으면 닉네임으로 찾아서 그대로 사용
-   - 처음 사용하는 닉네임이면 새 게임 데이터를 자동 생성
+   로그인 / 회원가입
 ============================== */
 
-function findAccountByNickname(nickname){
-    const accounts=getAccounts();
-    const wanted=String(nickname).trim().toLowerCase();
+function showSignup(){
 
-    for(const [id,account] of Object.entries(accounts)){
-        const savedNick=String(
-            account?.nickname ||
-            account?.game?.nickname ||
-            ""
-        ).trim().toLowerCase();
+    document.getElementById("authPage")
+        .classList.add("hidden");
 
-        if(savedNick===wanted){
-            return {id,account};
-        }
-    }
+    document.getElementById("signupPage")
+        .classList.remove("hidden");
 
-    return null;
 }
 
-function createNicknameAccount(nickname){
+function showLogin(){
+
+    document.getElementById("signupPage")
+        .classList.add("hidden");
+
+    document.getElementById("authPage")
+        .classList.remove("hidden");
+
+}
+
+function signup(){
+
+    const id=
+        document.getElementById("signupId")
+        .value.trim();
+
+    const nick=
+        document.getElementById("signupNick")
+        .value.trim();
+
+    const pw=
+        document.getElementById("signupPw")
+        .value;
+
+    if(!id||!nick||!pw){
+
+        toast("모든 항목을 입력해주세요.");
+        return;
+
+    }
+
     const accounts=getAccounts();
 
-    // 기존 계정과 닉네임이 같은 경우에는 절대 새 데이터를 만들지 않습니다.
-    const existing=findAccountByNickname(nickname);
-    if(existing) return existing;
+    if(accounts[id]){
 
-    // 아이디 대신 내부용 고유 키만 자동 생성합니다.
-    // 사용자는 아이디를 입력하거나 기억할 필요가 없습니다.
-    let id="nick_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
+        toast("이미 존재하는 아이디입니다.");
+        return;
 
-    while(accounts[id]){
-        id="nick_"+Date.now()+"_"+Math.random().toString(36).slice(2,8);
     }
 
     accounts[id]={
-        nickname:nickname,
-        game:defaultUser(nickname)
+        nickname:nick,
+        password:pw,
+        game:defaultUser(nick)
     };
 
     saveAccounts(accounts);
 
-    return {
-        id:id,
-        account:accounts[id]
-    };
+    toast("회원가입 완료!");
+
+    showLogin();
+
 }
 
-function enterGame(){
-    const input=document.getElementById("loginNick");
-    const nickname=input ? input.value.trim() : "";
+function login(){
 
-    if(!nickname){
-        toast("닉네임을 입력해주세요.");
-        if(input) input.focus();
+    const id=
+        document.getElementById("loginId")
+        .value.trim();
+
+    const pw=
+        document.getElementById("loginPw")
+        .value;
+
+    const accounts=getAccounts();
+
+    if(
+        !accounts[id]||
+        accounts[id].password!==pw
+    ){
+
+        toast("아이디 또는 비밀번호가 틀렸습니다.");
         return;
+
     }
 
-    if(nickname.length<2){
-        toast("닉네임은 2글자 이상 입력해주세요.");
-        if(input) input.focus();
-        return;
-    }
+    currentAccountId=id;
 
-    if(nickname.length>20){
-        toast("닉네임은 20글자 이하로 입력해주세요.");
-        if(input) input.focus();
-        return;
-    }
-
-    let found=findAccountByNickname(nickname);
-
-    if(!found){
-        found=createNicknameAccount(nickname);
-        toast("🎉 새 낚시왕 데이터가 생성되었습니다!");
-    }
-
-    currentAccountId=found.id;
     currentUser=
-        found.account.game||
-        defaultUser(found.account.nickname||nickname);
+        accounts[id].game||
+        defaultUser(accounts[id].nickname);
 
-    // 예전 데이터에 비밀번호 필드가 남아 있더라도
-    // 이제는 인증에 사용하지 않습니다.
-    if(found.account.password!==undefined){
-        delete found.account.password;
-    }
+    localStorage.setItem(
+        LOGIN_KEY,
+        id
+    );
 
-    currentUser.nickname=found.account.nickname||nickname;
-
-    saveGame();
     openGame();
+
 }
 
 function logout(){
-    saveGame();
 
-    if(autoFishing){
-        autoFishing=false;
-        clearInterval(autoTimer);
-        autoTimer=null;
-    }
+    saveGame();
 
     currentUser=null;
     currentAccountId=null;
 
-    document.getElementById("gamePage").classList.add("hidden");
-    document.getElementById("authPage").classList.remove("hidden");
+    localStorage.removeItem(LOGIN_KEY);
 
-    const input=document.getElementById("loginNick");
-    if(input){
-        input.value="";
-        input.focus();
-    }
+    document.getElementById("gamePage")
+        .classList.add("hidden");
+
+    document.getElementById("authPage")
+        .classList.remove("hidden");
+
 }
+
+function openGame(){
+
+    document.getElementById("authPage")
+        .classList.add("hidden");
+
+    document.getElementById("signupPage")
+        .classList.add("hidden");
+
+    document.getElementById("gamePage")
+        .classList.remove("hidden");
+
+    renderAll();
+
+}
+
 
 /* ==============================
    저장
@@ -3451,7 +3420,7 @@ function renderAdmin(){
     const accounts=getAccounts();
     const target=document.getElementById("adminTarget");
     const previous=target.value;
-    target.innerHTML=Object.keys(accounts).map(id=>`<option value="${id}">${accounts[id].nickname||id}</option>`).join("");
+    target.innerHTML=Object.keys(accounts).map(id=>`<option value="${id}">${accounts[id].nickname||id} (${id})</option>`).join("");
     if(accounts[previous]) target.value=previous;
 
     document.getElementById("adminItem").innerHTML=items.map(x=>`<option value="${x.id}">${x.name} · ${x.tier}등급</option>`).join("");
@@ -4130,72 +4099,36 @@ function toast(message){
 
 }
 
+
 /* ==============================
-   🎲 베팅 시스템
+   자동 로그인
 ============================== */
 
-const BET_OPTIONS = [
-    { amount: 1.5, winRate: 50 },
-    { amount: 6,   winRate: 40 },
-    { amount: 12,  winRate: 30 },
-    { amount: 20,  winRate: 22 },
-    { amount: 28,  winRate: 16 },
-    { amount: 40,  winRate: 10 },
-    { amount: 70,  winRate: 5 },
-    { amount: 100, winRate: 2 }
-];
+function autoLogin(){
 
-function placeBet(amount){
+    const id=
+        localStorage.getItem(LOGIN_KEY);
 
-    const bet = BET_OPTIONS.find(x => x.amount === amount);
-
-    if(!bet){
-        toast("올바른 베팅 금액이 아닙니다.");
+    if(!id)
         return;
-    }
 
-    if(currentUser.coins < amount){
-        toast("💰 코인이 부족합니다.");
+    const accounts=getAccounts();
+
+    if(!accounts[id])
         return;
-    }
 
-    currentUser.coins -= amount;
+    currentAccountId=id;
 
-    const win = Math.random() * 100 < bet.winRate;
-
-    if(win){
-
-        const reward = amount * 2;
-
-        currentUser.coins += reward;
-        currentUser.totalCoinsEarned += reward;
-
-        toast(
-            "🎉 베팅 성공! +" +
-            reward.toLocaleString() +
-            " 코인"
+    currentUser=
+        accounts[id].game||
+        defaultUser(
+            accounts[id].nickname
         );
 
-    }else{
+    openGame();
 
-        toast(
-            "❌ 베팅 실패! -" +
-            amount.toLocaleString() +
-            " 코인"
-        );
-
-    }
-
-    saveGame();
-    renderAll();
 }
 
-
-
-/* ==============================
-   자동 로그인 제거
-   새로 접속하면 닉네임을 입력해서 입장합니다.
-============================== */
 
 /* ==============================
    자동 저장
@@ -4207,10 +4140,13 @@ setInterval(
 );
 
 
-/* 실행: 닉네임 입력 화면에서 시작 */
+/* 실행 */
+
+autoLogin();
 
 
 </script>
 
 </body>
 </html>
+
