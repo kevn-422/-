@@ -149,7 +149,7 @@ th,td{
     .battle-box{grid-template-columns:1fr}
 }
 </style>
-<style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}html{background-color:transparent}html.chatgptOled.dark,html.mobileSkybridge.dark{background-color:#000}@supports (font: -apple-system-body){html.mobileSkybridge{font:-apple-system-body}}html.desktopSkybridge.dark{background-color:#1e1e1e}html.desktopSkybridge [data-openai-titlebar]{padding-left:calc(8px + var(--openai-titlebar-left-inset, 0px));padding-right:8px}html.transparentSkybridgeBackground,html.transparentSkybridgeBackground.dark{background-color:transparent}html.androidSkybridge,html.androidSkybridge body,html.androidSkybridge *{-webkit-tap-highlight-color:rgba(255,255,255,0)}html.androidSkybridge *::selection,html.androidSkybridge *::-moz-selection{background:#fff0;color:inherit}</style></head>
+<style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}html{background-color:transparent}html.chatgptOled.dark,html.mobileSkybridge.dark{background-color:#000}@supports (font: -apple-system-body){html.mobileSkybridge{font:-apple-system-body}}html.desktopSkybridge.dark{background-color:#1e1e1e}html.desktopSkybridge [data-openai-titlebar]{padding-left:calc(8px + var(--openai-titlebar-left-inset, 0px));padding-right:8px}html.transparentSkybridgeBackground,html.transparentSkybridgeBackground.dark{background-color:transparent}html.androidSkybridge,html.androidSkybridge body,html.androidSkybridge *{-webkit-tap-highlight-color:rgba(255,255,255,0)}html.androidSkybridge *::selection,html.androidSkybridge *::-moz-selection{background:#fff0;color:inherit}</style><style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}html{background-color:transparent}html.chatgptOled.dark,html.mobileSkybridge.dark{background-color:#000}@supports (font: -apple-system-body){html.mobileSkybridge{font:-apple-system-body}}html.desktopSkybridge.dark{background-color:#1e1e1e}html.desktopSkybridge [data-openai-titlebar]{padding-left:calc(8px + var(--openai-titlebar-left-inset, 0px));padding-right:8px}html.transparentSkybridgeBackground,html.transparentSkybridgeBackground.dark{background-color:transparent}html.androidSkybridge,html.androidSkybridge body,html.androidSkybridge *{-webkit-tap-highlight-color:rgba(255,255,255,0)}html.androidSkybridge *::selection,html.androidSkybridge *::-moz-selection{background:#fff0;color:inherit}</style></head>
 
 <body>
 
@@ -190,7 +190,7 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 <div id="toast"></div>
 
 <!-- 로그인 -->
-<div id="authPage" class="container auth">
+<div id="authPage" class="container auth hidden">
     <div class="card">
         <h1 class="center">🎣 낚시왕</h1>
         <p class="center small">200종의 물고기를 잡고 최고의 낚시왕이 되어보세요!</p>
@@ -218,11 +218,23 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 </div>
 
 <!-- 게임 -->
-<div id="gamePage" class="container hidden">
+<div id="gamePage" class="container">
 
     <div class="card">
         <h1>🎣 낚시왕</h1>
-        <div id="userInfo"></div>
+        <div id="userInfo">
+
+        👤 ㅇㄵㄹㅇㅇ
+
+        &nbsp; | &nbsp;
+
+        ⭐ Lv.1
+
+        &nbsp; | &nbsp;
+
+        💰 500
+
+    </div>
 
         <div class="nav">
             <button onclick="showPage('home')">🏠 홈</button>
@@ -235,6 +247,7 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
             <button onclick="showPage('equipment')">🛡️ 장비</button>
             <button onclick="showPage('shop')">🏪 상점</button>
             <button onclick="showPage('ranking')">🏆 랭킹</button>
+            <button onclick="showPage('chanceGamePage')">🎲 행운 게임</button>
             <button id="adminNavButton" class="danger hidden" onclick="showPage('admin')">👑 관리자</button>
             <button class="danger" onclick="logout()">로그아웃</button>
         </div>
@@ -246,21 +259,101 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
         <div class="card">
             <h2>🏠 내 정보</h2>
 
-            <div id="homeStats" class="grid"></div>
+            <div id="homeStats" class="grid">
+
+        <div class="stat">
+            🪙 코인
+            <div class="big">
+                500
+            </div>
+        </div>
+
+        <div class="stat">
+            ⭐ 레벨
+            <div class="big">
+                1
+            </div>
+        </div>
+
+        <div class="stat">
+            🐟 잡은 물고기
+            <div class="big">
+                0
+            </div>
+        </div>
+
+        <div class="stat">
+            📖 물고기 도감
+            <div class="big">
+                0/200
+            </div>
+        </div>
+
+        <div class="stat">
+            💎 아이템 도감
+            <div class="big">
+                0/150
+            </div>
+        </div>
+
+        <div class="stat">
+            ⚔️ 대결 승리
+            <div class="big">
+                0
+            </div>
+        </div>
+
+    </div>
 
             <br>
 
             <b>경험치</b>
             <div class="progress">
-                <div id="expBar" class="progress-bar"></div>
+                <div id="expBar" class="progress-bar" style="width: 0%;"></div>
             </div>
 
-            <p id="expText" class="small"></p>
+            <p id="expText" class="small">0 / 100 EXP</p>
         </div>
 
         <div class="card">
             <h2>📊 능력치</h2>
-            <div id="stats"></div>
+            <div id="stats">
+
+        <div class="grid">
+
+            <div class="stat">
+                🍀 행운
+                <b>1.00x</b>
+            </div>
+
+            <div class="stat">
+                ⚡ 낚시 속도
+                <b>+0%</b>
+            </div>
+
+            <div class="stat">
+                💰 판매 가격
+                <b>+0%</b>
+            </div>
+
+            <div class="stat">
+                💎 아이템 획득률
+                <b>+0%</b>
+            </div>
+
+            <div class="stat">
+                ⭐ 희귀 확률
+                <b>+0%</b>
+            </div>
+
+            <div class="stat">
+                📈 경험치
+                <b>+0%</b>
+            </div>
+
+        </div>
+
+    </div>
         </div>
 
     </section>
@@ -275,17 +368,36 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
                 <div>
                     <label>낚싯대</label>
-                    <select id="rodSelect" onchange="changeRod()"></select>
+                    <select id="rodSelect" onchange="changeRod()">
+
+                <option value="wood" selected="">
+                    나무 낚싯대
+                </option>
+
+            </select>
                 </div>
 
                 <div>
                     <label>낚시터</label>
-                    <select id="locationSelect" onchange="changeLocation()"></select>
+                    <select id="locationSelect" onchange="changeLocation()">
+
+                <option value="sea" selected="">
+                    평범한 바다
+                </option>
+
+            </select>
                 </div>
 
                 <div>
                     <label>미끼</label>
-                    <select id="baitSelect" onchange="changeBait()"></select>
+                    <select id="baitSelect" onchange="changeBait()">
+
+                <option value="basic" selected="">
+                    기본 미끼
+                    x1
+                </option>
+
+            </select>
                 </div>
 
             </div>
@@ -296,7 +408,7 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
             <button class="warning" onclick="usePotion()">🍀 행운 물약</button>
             <button class="success" onclick="toggleAutoFishing()">🤖 자동 낚시</button>
 
-            <p id="autoStatus" class="small"></p>
+            <p id="autoStatus" class="small">⚪ 자동 낚시 꺼짐</p>
 
             <div id="fishResult" class="card fish-result">
                 <div class="big">🎣</div>
@@ -306,7 +418,15 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
         <div class="card">
             <h3>현재 장비</h3>
-            <div id="currentEquipment"></div>
+            <div id="currentEquipment">
+
+        🎣 나무 낚싯대<br>
+        🌊 평범한 바다<br>
+        🪱 기본 미끼<br>
+        🍀 행운 물약:
+        0개
+
+    </div>
         </div>
 
     </section>
@@ -324,7 +444,7 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
             <div id="battleStartArea">
 
-                <select id="opponentSelect"></select>
+                <select id="opponentSelect"><option>대결할 다른 계정이 없습니다.</option></select>
 
                 <button class="danger" onclick="startBattle()">
                     ⚔️ 대결 시작
@@ -364,9 +484,24 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
         <div class="card">
             <h3>⚔️ 대결 기록</h3>
-            <div id="battleStats"></div>
+            <div id="battleStats">
+
+        🏆 승리:
+        0
+
+        &nbsp;&nbsp;
+
+        ❌ 패배:
+        0
+
+        &nbsp;&nbsp;
+
+        🤝 무승부:
+        0
+
+    </div>
             <br>
-            <div id="battleHistory"></div>
+            <div id="battleHistory"><p>대결 기록이 없습니다.</p></div>
         </div>
 
     </section>
@@ -379,11 +514,11 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
             <p>
                 현재 보유 코인:
-                <b id="transferMyCoins">0</b>
+                <b id="transferMyCoins">500</b>
             </p>
 
             <label>받는 사람</label>
-            <select id="transferTarget"></select>
+            <select id="transferTarget"><option>송금할 계정이 없습니다.</option></select>
 
             <label>송금할 코인</label>
             <input id="transferAmount" type="number" min="1" placeholder="송금할 코인">
@@ -395,7 +530,7 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
         <div class="card">
             <h2>📜 송금 내역</h2>
-            <div id="transferHistory"></div>
+            <div id="transferHistory"><p>송금 내역이 없습니다.</p></div>
         </div>
 
         <div class="card">
@@ -406,17 +541,17 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
             </p>
 
             <label>대상 유저</label>
-            <select id="levelStealTarget"></select>
+            <select id="levelStealTarget"><option>훔칠 대상 계정이 없습니다.</option></select>
 
             <p>
                 내 레벨:
                 <b id="levelStealMyLevel">1</b>
                 &nbsp; | &nbsp;
                 보유 코인:
-                <b id="levelStealMyCoins">0</b>
+                <b id="levelStealMyCoins">500</b>
             </p>
 
-            <p id="levelStealCooldown" class="small"></p>
+            <p id="levelStealCooldown" class="small">🟢 지금 사용할 수 있습니다.</p>
 
             <button class="danger" style="width:100%" onclick="stealLevel()">
                 🕵️ 레벨 1 훔치기 (10,000 코인)
@@ -430,9 +565,3209 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
         <div class="card">
             <h2>🐟 물고기 도감</h2>
-            <p id="fishDexCount"></p>
+            <p id="fishDexCount">0 / 200 발견</p>
 
-            <div id="fishDexGrid" class="grid"></div>
+            <div id="fishDexGrid" class="grid">
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r1">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r2">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r3">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r4">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r5">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r6">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r7">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r8">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r9">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r10">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r11">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r12">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3 class="rarity r13">
+                        ???
+                    </h3>
+
+                    <p>
+                        미발견
+                    </p>
+
+                    
+
+                </div>
+
+            </div>
         </div>
 
     </section>
@@ -442,9 +3777,2409 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
 
         <div class="card">
             <h2>💎 아이템 도감</h2>
-            <p id="itemDexCount"></p>
+            <p id="itemDexCount">0 / 150 발견</p>
 
-            <div id="itemDexGrid" class="grid"></div>
+            <div id="itemDexGrid" class="grid">
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>
+                        ???
+                    </h3>
+
+                    
+                            <p class="small">
+                                아직 발견하지 못했습니다.
+                            </p>
+                        
+
+                </div>
+
+            </div>
         </div>
 
     </section>
@@ -459,12 +6194,12 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
                 💰 물고기 전부 판매
             </button>
 
-            <div id="fishInventory" class="grid"></div>
+            <div id="fishInventory" class="grid"><p>물고기가 없습니다.</p></div>
         </div>
 
         <div class="card">
             <h2>💎 아이템 인벤토리</h2>
-            <div id="itemInventory" class="grid"></div>
+            <div id="itemInventory" class="grid"><p>아이템이 없습니다.</p></div>
         </div>
 
     </section>
@@ -475,15 +6210,17 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
         <div class="card">
             <h2>🛡️ 장비</h2>
 
-            <p id="equipmentLimit"></p>
+            <p id="equipmentLimit">장착 슬롯:
+        0
+        / 5</p>
 
-            <div id="equippedItems" class="grid"></div>
+            <div id="equippedItems" class="grid"><p>장착한 아이템이 없습니다.</p></div>
         </div>
 
         <div class="card">
             <h2>💎 장착 가능한 아이템</h2>
 
-            <div id="equipItems" class="grid"></div>
+            <div id="equipItems" class="grid"><p>장착할 아이템이 없습니다.</p></div>
         </div>
 
     </section>
@@ -494,27 +6231,1121 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
         <div class="card">
             <h2>🎲 랜덤 상점</h2>
             <p class="small">상품은 30분마다 자동으로 변경됩니다.</p>
-            <p id="randomShopTimer" class="small"></p>
+            <p id="randomShopTimer" class="small">⏰ 다음 상점 갱신: 29분 58초</p>
             <button class="warning" onclick="refreshRandomShop(true)">🔄 상점 새로고침 (500,000 코인)</button>
-            <div id="randomShop" class="grid"></div>
+            <div id="randomShop" class="grid">
+
+                <div class="item">
+
+                    <h3>🪱 좋은 미끼 ×3</h3>
+
+                    <p class="small">🍀 행운 1.3x</p>
+
+                    
+
+                    <p>
+                        💰
+                        <b>304</b>
+                        코인
+                    </p>
+
+                    
+
+                    
+                            <button class="primary" onclick="buyRandomShop(0)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🎣 ♾️ 영원의 낚싯대</h3>
+
+                    <p class="small">🍀 행운 35x</p>
+
+                    
+
+                    <p>
+                        💰
+                        <b>537,907,421</b>
+                        코인
+                    </p>
+
+                    
+
+                    
+                            <button class="primary" onclick="buyRandomShop(1)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🪱 신성 미끼 ×10</h3>
+
+                    <p class="small">🍀 행운 3x</p>
+
+                    <p>🔥 11% 할인</p>
+
+                    <p>
+                        💰
+                        <b>88,730</b>
+                        코인
+                    </p>
+
+                    <p class="small"><s>100,000</s> 코인</p>
+
+                    
+                            <button class="primary" onclick="buyRandomShop(2)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🪱 💠 절대 미끼 ×10</h3>
+
+                    <p class="small">🍀 행운 65x</p>
+
+                    
+
+                    <p>
+                        💰
+                        <b>104,844,435,864</b>
+                        코인
+                    </p>
+
+                    
+
+                    
+                            <button class="primary" onclick="buyRandomShop(3)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>💎 낡은 열쇠</h3>
+
+                    <p class="small">⭐ 아이템 등급 1</p>
+
+                    <p>🔥 13% 할인</p>
+
+                    <p>
+                        💰
+                        <b>433</b>
+                        코인
+                    </p>
+
+                    <p class="small"><s>500</s> 코인</p>
+
+                    
+                            <button class="primary" onclick="buyRandomShop(4)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌊 얼음 바다</h3>
+
+                    <p class="small">🍀 행운 2x</p>
+
+                    <p>🔥 18% 할인</p>
+
+                    <p>
+                        💰
+                        <b>40,843</b>
+                        코인
+                    </p>
+
+                    <p class="small"><s>50,000</s> 코인</p>
+
+                    
+                            <button class="primary" onclick="buyRandomShop(5)">
+                                🛒 구매
+                            </button>
+                        
+
+                </div>
+
+            </div>
         </div>
 
         <div class="card">
             <h2>🏪 낚싯대 상점</h2>
-            <div id="rodShop" class="grid"></div>
+            <div id="rodShop" class="grid">
+
+                <div class="item">
+
+                    <h3>나무 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 1x
+                    </p>
+
+                    <p>
+                        💰
+                        0
+                    </p>
+
+                    <p>🟢 보유 중</p>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>철 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 1.3x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('iron')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>황금 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 2x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('gold')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>다이아 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 3x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('diamond')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>신성 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 5x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('divine')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>미지의 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 10x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('unknown')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 우주 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 15x
+                    </p>
+
+                    <p>
+                        💰
+                        30,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('cosmic')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌀 차원 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 22x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('dimension')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>♾️ 영원의 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 35x
+                    </p>
+
+                    <p>
+                        💰
+                        500,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('eternal')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 은하 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 50x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('galaxy')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌠 다중우주 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 70x
+                    </p>
+
+                    <p>
+                        💰
+                        3,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('multiverse')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>💠 절대 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 100x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('absolute')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>👑 창조자의 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 150x
+                    </p>
+
+                    <p>
+                        💰
+                        50,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('creator')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>∞ 무한 낚싯대</h3>
+
+                    <p>
+                        🍀 행운 250x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyRod('infinite')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            </div>
         </div>
 
         <div class="card">
             <h2>🌊 낚시터 상점</h2>
-            <div id="locationShop" class="grid"></div>
+            <div id="locationShop" class="grid">
+
+                <div class="item">
+
+                    <h3>평범한 바다</h3>
+
+                    <p>
+                        🍀 행운 1x
+                    </p>
+
+                    <p>
+                        💰
+                        0
+                    </p>
+
+                    <p>🟢 보유 중</p>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>심해</h3>
+
+                    <p>
+                        🍀 행운 1.5x
+                    </p>
+
+                    <p>
+                        💰
+                        5,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('deep')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>얼음 바다</h3>
+
+                    <p>
+                        🍀 행운 2x
+                    </p>
+
+                    <p>
+                        💰
+                        50,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('ice')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>용암 바다</h3>
+
+                    <p>
+                        🍀 행운 3x
+                    </p>
+
+                    <p>
+                        💰
+                        500,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('volcano')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>우주 바다</h3>
+
+                    <p>
+                        🍀 행운 5x
+                    </p>
+
+                    <p>
+                        💰
+                        5,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('space')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>차원 바다</h3>
+
+                    <p>
+                        🍀 행운 10x
+                    </p>
+
+                    <p>
+                        💰
+                        50,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('dimension')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 우주 심연</h3>
+
+                    <p>
+                        🍀 행운 15x
+                    </p>
+
+                    <p>
+                        💰
+                        30,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('cosmic')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🕳️ 공허의 바다</h3>
+
+                    <p>
+                        🍀 행운 22x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('void')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>♾️ 영원의 해역</h3>
+
+                    <p>
+                        🍀 행운 35x
+                    </p>
+
+                    <p>
+                        💰
+                        500,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('eternal')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 은하 해역</h3>
+
+                    <p>
+                        🍀 행운 50x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('galaxy')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌠 다중우주 해역</h3>
+
+                    <p>
+                        🍀 행운 70x
+                    </p>
+
+                    <p>
+                        💰
+                        3,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('multiverse')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>💠 절대의 해역</h3>
+
+                    <p>
+                        🍀 행운 100x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('absolute')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>👑 창조자의 해역</h3>
+
+                    <p>
+                        🍀 행운 150x
+                    </p>
+
+                    <p>
+                        💰
+                        50,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('creator')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>∞ 무한의 해역</h3>
+
+                    <p>
+                        🍀 행운 250x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000,000
+                    </p>
+
+                    
+                            <button class="primary" onclick="buyLocation('infinite')">
+                                구매
+                            </button>
+                        
+
+                </div>
+
+            </div>
         </div>
 
         <div class="card">
             <h2>🪱 미끼 상점</h2>
-            <div id="baitShop" class="grid"></div>
+            <div id="baitShop" class="grid">
+
+                <div class="item">
+
+                    <h3>기본 미끼</h3>
+
+                    <p>
+                        🍀 행운 1x
+                    </p>
+
+                    <p>
+                        💰
+                        0
+                    </p>
+
+                    <p>
+                        보유: 1
+                    </p>
+
+                    <button class="primary" onclick="buyBait('basic')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>좋은 미끼</h3>
+
+                    <p>
+                        🍀 행운 1.3x
+                    </p>
+
+                    <p>
+                        💰
+                        100
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('good')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>희귀 미끼</h3>
+
+                    <p>
+                        🍀 행운 1.8x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('rare')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>신성 미끼</h3>
+
+                    <p>
+                        🍀 행운 3x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('divine')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 우주 미끼</h3>
+
+                    <p>
+                        🍀 행운 8x
+                    </p>
+
+                    <p>
+                        💰
+                        30,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('cosmic')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🕳️ 공허 미끼</h3>
+
+                    <p>
+                        🍀 행운 12x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('void')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>♾️ 영원 미끼</h3>
+
+                    <p>
+                        🍀 행운 20x
+                    </p>
+
+                    <p>
+                        💰
+                        500,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('eternal')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌌 은하 미끼</h3>
+
+                    <p>
+                        🍀 행운 30x
+                    </p>
+
+                    <p>
+                        💰
+                        1,000,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('galaxy')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>🌠 다중우주 미끼</h3>
+
+                    <p>
+                        🍀 행운 45x
+                    </p>
+
+                    <p>
+                        💰
+                        3,000,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('multiverse')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>💠 절대 미끼</h3>
+
+                    <p>
+                        🍀 행운 65x
+                    </p>
+
+                    <p>
+                        💰
+                        10,000,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('absolute')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>👑 창조자의 미끼</h3>
+
+                    <p>
+                        🍀 행운 90x
+                    </p>
+
+                    <p>
+                        💰
+                        50,000,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('creator')">
+                        구매
+                    </button>
+
+                </div>
+
+            
+
+                <div class="item">
+
+                    <h3>∞ 무한 미끼</h3>
+
+                    <p>
+                        🍀 행운 130x
+                    </p>
+
+                    <p>
+                        💰
+                        100,000,000,000
+                    </p>
+
+                    <p>
+                        보유: 0
+                    </p>
+
+                    <button class="primary" onclick="buyBait('infinite')">
+                        구매
+                    </button>
+
+                </div>
+
+            </div>
         </div>
 
     </section>
+
+    
 
     <!-- 👑 관리자 -->
     <section id="admin" class="page hidden">
@@ -591,12 +7422,130 @@ border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px 
         </div>
     </section>
 
+
+    <!-- 🎲 무료 행운 게임 -->
+    <section id="chanceGamePage" class="page hidden">
+
+        <div class="card">
+            <h2>🎲 무료 행운 게임</h2>
+
+            <p class="small">
+                코인을 사용하지 않는 무료 미니게임입니다.<br>
+                결과에 따라 실제 게임 경험치(EXP)를 획득합니다.
+            </p>
+
+            <div id="chanceResult" style="
+                 text-align:center;
+                 font-size:30px;
+                 font-weight:bold;
+                 padding:25px 10px;
+                 margin:15px 0;
+                 background:#16263d;
+                 border-radius:15px;">
+                🎲 ?
+            </div>
+
+            <div class="grid">
+
+                <div class="stat center">
+                    🟢 1.5배<br>
+                    <b>45%</b>
+                </div>
+
+                <div class="stat center">
+                    🔵 6배<br>
+                    <b>25%</b>
+                </div>
+
+                <div class="stat center">
+                    🟣 12배<br>
+                    <b>15%</b>
+                </div>
+
+                <div class="stat center">
+                    🟠 20배<br>
+                    <b>8%</b>
+                </div>
+
+                <div class="stat center">
+                    🔴 28배<br>
+                    <b>4%</b>
+                </div>
+
+                <div class="stat center">
+                    🟡 40배<br>
+                    <b>2%</b>
+                </div>
+
+                <div class="stat center">
+                    💎 70배<br>
+                    <b>0.9%</b>
+                </div>
+
+                <div class="stat center">
+                    👑 100배<br>
+                    <b>0.1%</b>
+                </div>
+
+            </div>
+
+            <p class="center">
+                📈 이번 결과 EXP:
+                <b id="chanceExpGain">0</b>
+            </p>
+
+            <p class="center">
+                ⭐ 현재 EXP:
+                <b id="chanceCurrentExp">0</b>
+            </p>
+
+            <button id="chanceButton" class="primary" style="width:100%;" onclick="playChanceGame()">
+                🎲 무료 게임 시작
+            </button>
+        </div>
+
+    </section>
+
     <!-- 랭킹 -->
     <section id="ranking" class="page hidden">
 
         <div class="card">
             <h2>🏆 전체 랭킹</h2>
-            <div id="rankingTable"></div>
+            <div id="rankingTable">
+
+        <table>
+
+            <tbody><tr>
+                <th>순위</th>
+                <th>닉네임</th>
+                <th>레벨</th>
+                <th>대결 승리</th>
+                <th>코인</th>
+            </tr>
+
+            
+
+                        <tr>
+
+                            <td>1</td>
+
+                            <td>ㅇㄵㄹㅇㅇ</td>
+
+                            <td>Lv.1</td>
+
+                            <td>0</td>
+
+                            <td>
+                                500
+                            </td>
+
+                        </tr>
+
+                    
+
+        </tbody></table>
+
+    </div>
         </div>
 
     </section>
@@ -4555,6 +11504,137 @@ function toast(message){
             el.style.display="none";
 
         },2500);
+
+}
+
+
+
+/* ==============================
+   🎲 무료 행운 게임
+   실제 addExp() 시스템과 연결
+============================== */
+
+let chanceGamePlaying=false;
+
+function playChanceGame(){
+
+    if(!currentUser || chanceGamePlaying)
+        return;
+
+    chanceGamePlaying=true;
+
+    const button=document.getElementById("chanceButton");
+    const result=document.getElementById("chanceResult");
+
+    if(button){
+        button.disabled=true;
+        button.textContent="🎲 결과 계산 중...";
+    }
+
+    if(result)
+        result.textContent="🎲 ...";
+
+    const animation=setInterval(()=>{
+
+        const preview=[
+            "🟢 1.5배",
+            "🔵 6배",
+            "🟣 12배",
+            "🟠 20배",
+            "🔴 28배",
+            "🟡 40배",
+            "💎 70배",
+            "👑 100배"
+        ];
+
+        if(result){
+            result.textContent=
+                preview[
+                    Math.floor(
+                        Math.random()*preview.length
+                    )
+                ];
+        }
+
+    },100);
+
+    setTimeout(()=>{
+
+        clearInterval(animation);
+
+        const random=Math.random()*100;
+
+        let multiplier;
+
+        if(random<45){
+            multiplier=1.5;
+        }else if(random<70){
+            multiplier=6;
+        }else if(random<85){
+            multiplier=12;
+        }else if(random<93){
+            multiplier=20;
+        }else if(random<97){
+            multiplier=28;
+        }else if(random<99){
+            multiplier=40;
+        }else if(random<99.9){
+            multiplier=70;
+        }else{
+            multiplier=100;
+        }
+
+        /*
+         * 배율은 EXP 계산에만 사용합니다.
+         * 코인은 차감/지급하지 않습니다.
+         */
+        const expGain=Math.floor(multiplier*10);
+
+        // ★ 네 게임의 실제 EXP 시스템 사용
+        addExp(expGain);
+
+        // 저장 + 홈 EXP 바/레벨 즉시 갱신
+        saveGame();
+        renderAll();
+
+        if(result)
+            result.textContent=
+                "🎉 "+multiplier+"배 결과!";
+
+        const gainEl=
+            document.getElementById("chanceExpGain");
+
+        const currentExpEl=
+            document.getElementById("chanceCurrentExp");
+
+        if(gainEl)
+            gainEl.textContent=
+                expGain.toLocaleString();
+
+        if(currentExpEl)
+            currentExpEl.textContent=
+                Math.floor(currentUser.exp).toLocaleString();
+
+        if(multiplier>=70){
+            toast(
+                "👑 대박! "+multiplier+
+                "배 → +"+expGain+" EXP"
+            );
+        }else{
+            toast(
+                "🎉 "+multiplier+
+                "배 → +"+expGain+" EXP"
+            );
+        }
+
+        if(button){
+            button.disabled=false;
+            button.textContent="🎲 무료 게임 시작";
+        }
+
+        chanceGamePlaying=false;
+
+    },1800);
 
 }
 
