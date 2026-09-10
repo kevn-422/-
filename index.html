@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
+<html lang="ko"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>🎣 낚시게임 사이트</title>
+<title>🎣 낚시왕</title>
 
 <style>
 *{box-sizing:border-box}
@@ -150,9 +149,43 @@ th,td{
     .battle-box{grid-template-columns:1fr}
 }
 </style>
-</head>
+<style>html,body,#root{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0}html,body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Helvetica Neue,Arial,sans-serif!important}button,input,textarea,select{font-family:inherit}html{background-color:transparent}html.chatgptOled.dark,html.mobileSkybridge.dark{background-color:#000}@supports (font: -apple-system-body){html.mobileSkybridge{font:-apple-system-body}}html.desktopSkybridge.dark{background-color:#1e1e1e}html.desktopSkybridge [data-openai-titlebar]{padding-left:calc(8px + var(--openai-titlebar-left-inset, 0px));padding-right:8px}html.transparentSkybridgeBackground,html.transparentSkybridgeBackground.dark{background-color:transparent}html.androidSkybridge,html.androidSkybridge body,html.androidSkybridge *{-webkit-tap-highlight-color:rgba(255,255,255,0)}html.androidSkybridge *::selection,html.androidSkybridge *::-moz-selection{background:#fff0;color:inherit}</style></head>
 
 <body>
+
+<!-- 📋 전체 코드 복사 패널 -->
+<div id="sourceCopyPanel" style="
+position:fixed;right:18px;bottom:18px;z-index:99999;
+background:#111827;color:#fff;padding:12px;border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,.35);font-family:Arial,sans-serif;">
+  <button id="copyAllSourceBtn" type="button" onclick="copyAllSource()" style="
+  border:0;border-radius:10px;padding:11px 15px;cursor:pointer;
+  background:#2563eb;color:#fff;font-weight:700;font-size:14px;">
+    📋 전체 코드 복사
+  </button>
+  <button type="button" onclick="toggleSourceViewer()" style="
+  margin-left:6px;border:0;border-radius:10px;padding:11px 15px;cursor:pointer;
+  background:#374151;color:#fff;font-weight:700;font-size:14px;">
+    👀 코드 보기
+  </button>
+</div>
+
+<div id="sourceViewer" style="
+display:none;position:fixed;inset:5%;z-index:99998;background:#0b1220;
+border:1px solid #374151;border-radius:16px;padding:18px;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#fff;">
+    <b>📄 현재 HTML 전체 코드</b>
+    <button type="button" onclick="toggleSourceViewer()" style="
+    border:0;border-radius:8px;padding:8px 12px;cursor:pointer;
+    background:#ef4444;color:#fff;font-weight:700;">닫기</button>
+  </div>
+  <textarea id="sourceCodeBox" readonly="" style="
+  width:100%;height:calc(100% - 55px);resize:none;
+  background:#020617;color:#e5e7eb;border:1px solid #334155;
+  border-radius:10px;padding:12px;font-family:Consolas,monospace;font-size:12px;
+  line-height:1.45;"></textarea>
+</div>
+
 
 <div id="toast"></div>
 
@@ -160,7 +193,7 @@ th,td{
 <div id="authPage" class="container auth">
     <div class="card">
         <h1 class="center">🎣 낚시왕</h1>
-        <p class="center small">600종의 물고기를 잡고 최고의 낚시왕이 되어보세요!</p>
+        <p class="center small">200종의 물고기를 잡고 최고의 낚시왕이 되어보세요!</p>
 
         <input id="loginId" placeholder="아이디">
         <input id="loginPw" type="password" placeholder="비밀번호">
@@ -312,10 +345,7 @@ th,td{
                         <div id="myBattleScore" class="battle-score">0</div>
                         <p id="myBattleFish">-</p>
 
-                        <button
-                            class="primary"
-                            onclick="battleCatch()"
-                            style="width:100%">
+                        <button class="primary" onclick="battleCatch()" style="width:100%">
                             🎣 낚기!
                         </button>
                     </div>
@@ -356,16 +386,9 @@ th,td{
             <select id="transferTarget"></select>
 
             <label>송금할 코인</label>
-            <input
-                id="transferAmount"
-                type="number"
-                min="1"
-                placeholder="송금할 코인">
+            <input id="transferAmount" type="number" min="1" placeholder="송금할 코인">
 
-            <button
-                class="primary"
-                style="width:100%"
-                onclick="transferCoins()">
+            <button class="primary" style="width:100%" onclick="transferCoins()">
                 💸 송금하기
             </button>
         </div>
@@ -373,6 +396,31 @@ th,td{
         <div class="card">
             <h2>📜 송금 내역</h2>
             <div id="transferHistory"></div>
+        </div>
+
+        <div class="card">
+            <h2>🕵️ 레벨 훔치기</h2>
+            <p class="small">
+                다른 유저의 레벨 1을 훔쳐 내 레벨에 추가합니다.
+                1회 사용 비용은 10,000 코인이며 60초 쿨타임이 있습니다.
+            </p>
+
+            <label>대상 유저</label>
+            <select id="levelStealTarget"></select>
+
+            <p>
+                내 레벨:
+                <b id="levelStealMyLevel">1</b>
+                &nbsp; | &nbsp;
+                보유 코인:
+                <b id="levelStealMyCoins">0</b>
+            </p>
+
+            <p id="levelStealCooldown" class="small"></p>
+
+            <button class="danger" style="width:100%" onclick="stealLevel()">
+                🕵️ 레벨 1 훔치기 (10,000 코인)
+            </button>
         </div>
 
     </section>
@@ -478,7 +526,6 @@ th,td{
             <select id="adminTarget"></select>
 
             <div class="grid">
-                
                 <div class="item">
                     <b>💰 코인 지급/차감</b>
                     <input id="adminCoins" type="number" placeholder="예: 500000">
@@ -549,67 +596,14 @@ th,td{
 
         <div class="card">
             <h2>🏆 전체 랭킹</h2>
-           <section id="ranking" class="page hidden">
-    <div class="card">
-        <h2>🏆 코인 랭킹</h2>
-        <p class="small">현재 보유 코인이 많은 순서입니다.</p>
-
-        <div id="rankingTable"></div>
-    </div>
-</section>
+            <div id="rankingTable"></div>
         </div>
 
     </section>
 
 </div>
 
-
-    <script>
-
-// 기존 낚시게임 JavaScript 코드들...
-
-
-function getPlayerLuck(){ 
-
-    if(!currentUser) 
-        return 1; 
-
-    const rod = 
-        rods.find(x => 
-            x.id === currentUser.currentRod 
-        ) || rods[0]; 
-
-    const location = 
-        locations.find(x => 
-            x.id === currentUser.currentLocation 
-        ) || locations[0]; 
-
-    const bait = 
-        baits.find(x => 
-            x.id === currentUser.currentBait 
-        ) || baits[0]; 
-
-    const rodLuck = Number(rod.luck) || 1;
-    const locationLuck = Number(location.luck) || 1;
-    const baitLuck = Number(bait.luck) || 1;
-
-    const adminLuck =
-        Number(currentUser.adminLuckMultiplier) || 1;
-
-    return (
-        rodLuck *
-        locationLuck *
-        baitLuck *
-        adminLuck
-    );
-}
-
-// 나머지 기존 코드...
-
-
-
-
-
+<script>
 
 /* ==============================
    저장 키
@@ -620,12 +614,17 @@ const LOGIN_KEY="fishingKing_currentAccount";
 const RANDOM_SHOP_KEY="fishingKing_randomShop";
 const RANDOM_SHOP_REFRESH=30*60*1000;
 
+// 🕵️ 레벨 훔치기 설정
+const LEVEL_STEAL_COST=10000;
+const LEVEL_STEAL_AMOUNT=1;
+const LEVEL_STEAL_COOLDOWN=60*1000;
+
 /* ==============================
    👑 관리자 설정
    아이디 또는 닉네임을 여기에 추가하세요.
 ============================== */
 const ADMIN_NAMES=[
-    "건" , "디아" , "우파루파ㅣ멘금" , "A" , "섹스"
+    "Kevinb_703"
 ];
 
 function isAdmin(){
@@ -664,611 +663,40 @@ const rarity=[
 ============================== */
 
 const fishNames=[
-    "멸치",
-    "정어리",
-    "고등어",
-    "전갱이",
-    "청어",
-    "갈치",
-    "꽁치",
-    "삼치",
-    "참치",
-    "방어",
-    "연어",
-    "송어",
-    "잉어",
-    "붕어",
-    "메기",
-    "가물치",
-    "농어",
-    "우럭",
-    "광어",
-    "도미",
-    "복어",
-    "쥐치",
-    "오징어",
-    "문어",
-    "새우",
-    "꽃게",
-    "대게",
-    "랍스터",
-    "장어",
-    "청새치",
-    "황새치",
-    "돛새치",
-    "가오리",
-    "상어",
-    "고래상어",
-    "귀상어",
-    "백상아리",
-    "범고래",
-    "돌고래",
-    "참돌고래",
-    "해파리",
-    "불가사리",
-    "성게",
-    "소라",
-    "전복",
-    "조개",
-    "진주조개",
-    "해마",
-    "흰동가리",
-    "블루탱",
-    "나비고기",
-    "천사어",
-    "사자어",
-    "곰치",
-    "전기뱀장어",
-    "아귀",
-    "심해어",
-    "초롱아귀",
-    "용암어",
-    "불꽃잉어",
-    "얼음송어",
-    "번개참치",
-    "독도미",
-    "황금붕어",
-    "황금잉어",
-    "황금연어",
-    "황금참치",
-    "황금상어",
-    "황금고래",
-    "무지개송어",
-    "무지개잉어",
-    "무지개참치",
-    "별빛도미",
-    "별빛상어",
-    "달빛연어",
-    "달빛고래",
-    "태양참치",
-    "태양상어",
-    "태양고래",
-    "우주어",
-    "성운어",
-    "혜성어",
-    "행성어",
-    "블랙홀어",
-    "차원어",
-    "시간어",
-    "공간어",
-    "미래어",
-    "과거어",
-    "신화어",
-    "신룡어",
-    "용왕어",
-    "해신어",
-    "바다신어",
-    "천사어왕",
-    "악마어왕",
-    "신성어",
-    "암흑어",
-    "혼돈어",
-    "질서어",
-    "창조어",
-    "파괴어",
-    "영원어",
-    "무한어",
-    "궁극어",
-    "초궁극어",
-    "절대어",
-    "초월어왕",
-    "미지어",
-    "태초의 물고기",
-    "천상의 물고기",
-    "절대의 물고기",
-    "무한의 물고기",
-    "세계수어",
-    "신의 물고기",
-    "시간의 지배자",
-    "공간의 지배자",
-    "차원의 지배자",
-    "우주의 지배자",
-    "창조의 물고기",
-    "종말의 물고기",
-    "영원의 물고기",
-    "미지의 왕",
-    "최후의 물고기",
-    "낚시왕의 물고기",
-    "심해의 군주",
-    "바다의 군주",
-    "폭풍참치",
-    "폭풍상어",
-    "폭풍고래",
-    "번개의 지배자",
-    "불꽃의 지배자",
-    "얼음의 지배자",
-    "태양의 지배자",
-    "달의 지배자",
-    "星の支配者",
-    "은하어",
-    "은하상어",
-    "은하고래",
-    "초신성어",
-    "혜성의 왕",
-    "행성의 왕",
-    "블랙홀의 왕",
-    "시간의 왕",
-    "공간의 왕",
-    "차원의 왕",
-    "우주의 왕",
-    "신계어",
-    "천계어",
-    "마계어",
-    "신성한 고래",
-    "암흑의 고래",
-    "혼돈의 고래",
-    "질서의 고래",
-    "창조의 왕",
-    "파괴의 왕",
-    "영원의 왕",
-    "무한의 왕",
-    "궁극의 왕",
-    "절대의 왕",
-    "초월의 왕",
-    "미지의 신",
-    "태초의 왕",
-    "천상의 왕",
-    "전설의 낚시왕",
-    "심해룡어",
-    "해신의 사자",
-    "용왕의 사자",
-    "차원의 용",
-    "시간의 용",
-    "공간의 용",
-    "우주의 용",
-    "창조룡",
-    "파괴룡",
-    "영원룡",
-    "무한룡",
-    "절대룡",
-    "초월룡",
-    "미지룡",
-    "신의 사자",
-    "세계의 수호어",
-    "세계의 파괴어",
-    "세계의 창조어",
-    "최후의 왕",
-    "궁극의 물고기",
-    "심연의 물고기",
-    "태양룡어",
-    "달빛룡어",
-    "별빛룡어",
-    "은하의 지배자",
-    "성운의 지배자",
-    "우주룡",
-    "차원룡왕",
-    "시간룡왕",
-    "공간룡왕",
-    "창조신어",
-    "파괴신어",
-    "영원신어",
-    "무한신어",
-    "푸른왕어",
-    "푸른군주어",
-    "푸른수호자어",
-    "푸른지배자어",
-    "푸른사자어",
-    "푸른전사어",
-    "푸른기사어",
-    "푸른현자어",
-    "푸른마도사어",
-    "푸른용왕어",
-    "푸른신어",
-    "푸른황제어",
-    "푸른여왕어",
-    "푸른귀족어",
-    "푸른정령어",
-    "푸른정복자어",
-    "푸른파수꾼어",
-    "푸른파괴자어",
-    "푸른창조자어",
-    "푸른초월자어",
-    "붉은왕어",
-    "붉은군주어",
-    "붉은수호자어",
-    "붉은지배자어",
-    "붉은사자어",
-    "붉은전사어",
-    "붉은기사어",
-    "붉은현자어",
-    "붉은마도사어",
-    "붉은용왕어",
-    "붉은신어",
-    "붉은황제어",
-    "붉은여왕어",
-    "붉은귀족어",
-    "붉은정령어",
-    "붉은정복자어",
-    "붉은파수꾼어",
-    "붉은파괴자어",
-    "붉은창조자어",
-    "붉은초월자어",
-    "검은왕어",
-    "검은군주어",
-    "검은수호자어",
-    "검은지배자어",
-    "검은사자어",
-    "검은전사어",
-    "검은기사어",
-    "검은현자어",
-    "검은마도사어",
-    "검은용왕어",
-    "검은신어",
-    "검은황제어",
-    "검은여왕어",
-    "검은귀족어",
-    "검은정령어",
-    "검은정복자어",
-    "검은파수꾼어",
-    "검은파괴자어",
-    "검은창조자어",
-    "검은초월자어",
-    "하얀왕어",
-    "하얀군주어",
-    "하얀수호자어",
-    "하얀지배자어",
-    "하얀사자어",
-    "하얀전사어",
-    "하얀기사어",
-    "하얀현자어",
-    "하얀마도사어",
-    "하얀용왕어",
-    "하얀신어",
-    "하얀황제어",
-    "하얀여왕어",
-    "하얀귀족어",
-    "하얀정령어",
-    "하얀정복자어",
-    "하얀파수꾼어",
-    "하얀파괴자어",
-    "하얀창조자어",
-    "하얀초월자어",
-    "은빛왕어",
-    "은빛군주어",
-    "은빛수호자어",
-    "은빛지배자어",
-    "은빛사자어",
-    "은빛전사어",
-    "은빛기사어",
-    "은빛현자어",
-    "은빛마도사어",
-    "은빛용왕어",
-    "은빛신어",
-    "은빛황제어",
-    "은빛여왕어",
-    "은빛귀족어",
-    "은빛정령어",
-    "은빛정복자어",
-    "은빛파수꾼어",
-    "은빛파괴자어",
-    "은빛창조자어",
-    "은빛초월자어",
-    "청록왕어",
-    "청록군주어",
-    "청록수호자어",
-    "청록지배자어",
-    "청록사자어",
-    "청록전사어",
-    "청록기사어",
-    "청록현자어",
-    "청록마도사어",
-    "청록용왕어",
-    "청록신어",
-    "청록황제어",
-    "청록여왕어",
-    "청록귀족어",
-    "청록정령어",
-    "청록정복자어",
-    "청록파수꾼어",
-    "청록파괴자어",
-    "청록창조자어",
-    "청록초월자어",
-    "보랏빛왕어",
-    "보랏빛군주어",
-    "보랏빛수호자어",
-    "보랏빛지배자어",
-    "보랏빛사자어",
-    "보랏빛전사어",
-    "보랏빛기사어",
-    "보랏빛현자어",
-    "보랏빛마도사어",
-    "보랏빛용왕어",
-    "보랏빛신어",
-    "보랏빛황제어",
-    "보랏빛여왕어",
-    "보랏빛귀족어",
-    "보랏빛정령어",
-    "보랏빛정복자어",
-    "보랏빛파수꾼어",
-    "보랏빛파괴자어",
-    "보랏빛창조자어",
-    "보랏빛초월자어",
-    "분홍빛왕어",
-    "분홍빛군주어",
-    "분홍빛수호자어",
-    "분홍빛지배자어",
-    "분홍빛사자어",
-    "분홍빛전사어",
-    "분홍빛기사어",
-    "분홍빛현자어",
-    "분홍빛마도사어",
-    "분홍빛용왕어",
-    "분홍빛신어",
-    "분홍빛황제어",
-    "분홍빛여왕어",
-    "분홍빛귀족어",
-    "분홍빛정령어",
-    "분홍빛정복자어",
-    "분홍빛파수꾼어",
-    "분홍빛파괴자어",
-    "분홍빛창조자어",
-    "분홍빛초월자어",
-    "주황빛왕어",
-    "주황빛군주어",
-    "주황빛수호자어",
-    "주황빛지배자어",
-    "주황빛사자어",
-    "주황빛전사어",
-    "주황빛기사어",
-    "주황빛현자어",
-    "주황빛마도사어",
-    "주황빛용왕어",
-    "주황빛신어",
-    "주황빛황제어",
-    "주황빛여왕어",
-    "주황빛귀족어",
-    "주황빛정령어",
-    "주황빛정복자어",
-    "주황빛파수꾼어",
-    "주황빛파괴자어",
-    "주황빛창조자어",
-    "주황빛초월자어",
-    "금빛왕어",
-    "금빛군주어",
-    "금빛수호자어",
-    "금빛지배자어",
-    "금빛사자어",
-    "금빛전사어",
-    "금빛기사어",
-    "금빛현자어",
-    "금빛마도사어",
-    "금빛용왕어",
-    "금빛신어",
-    "금빛황제어",
-    "금빛여왕어",
-    "금빛귀족어",
-    "금빛정령어",
-    "금빛정복자어",
-    "금빛파수꾼어",
-    "금빛파괴자어",
-    "금빛창조자어",
-    "금빛초월자어",
-    "백금빛왕어",
-    "백금빛군주어",
-    "백금빛수호자어",
-    "백금빛지배자어",
-    "백금빛사자어",
-    "백금빛전사어",
-    "백금빛기사어",
-    "백금빛현자어",
-    "백금빛마도사어",
-    "백금빛용왕어",
-    "백금빛신어",
-    "백금빛황제어",
-    "백금빛여왕어",
-    "백금빛귀족어",
-    "백금빛정령어",
-    "백금빛정복자어",
-    "백금빛파수꾼어",
-    "백금빛파괴자어",
-    "백금빛창조자어",
-    "백금빛초월자어",
-    "옥빛왕어",
-    "옥빛군주어",
-    "옥빛수호자어",
-    "옥빛지배자어",
-    "옥빛사자어",
-    "옥빛전사어",
-    "옥빛기사어",
-    "옥빛현자어",
-    "옥빛마도사어",
-    "옥빛용왕어",
-    "옥빛신어",
-    "옥빛황제어",
-    "옥빛여왕어",
-    "옥빛귀족어",
-    "옥빛정령어",
-    "옥빛정복자어",
-    "옥빛파수꾼어",
-    "옥빛파괴자어",
-    "옥빛창조자어",
-    "옥빛초월자어",
-    "루비빛왕어",
-    "루비빛군주어",
-    "루비빛수호자어",
-    "루비빛지배자어",
-    "루비빛사자어",
-    "루비빛전사어",
-    "루비빛기사어",
-    "루비빛현자어",
-    "루비빛마도사어",
-    "루비빛용왕어",
-    "루비빛신어",
-    "루비빛황제어",
-    "루비빛여왕어",
-    "루비빛귀족어",
-    "루비빛정령어",
-    "루비빛정복자어",
-    "루비빛파수꾼어",
-    "루비빛파괴자어",
-    "루비빛창조자어",
-    "루비빛초월자어",
-    "사파이어빛왕어",
-    "사파이어빛군주어",
-    "사파이어빛수호자어",
-    "사파이어빛지배자어",
-    "사파이어빛사자어",
-    "사파이어빛전사어",
-    "사파이어빛기사어",
-    "사파이어빛현자어",
-    "사파이어빛마도사어",
-    "사파이어빛용왕어",
-    "사파이어빛신어",
-    "사파이어빛황제어",
-    "사파이어빛여왕어",
-    "사파이어빛귀족어",
-    "사파이어빛정령어",
-    "사파이어빛정복자어",
-    "사파이어빛파수꾼어",
-    "사파이어빛파괴자어",
-    "사파이어빛창조자어",
-    "사파이어빛초월자어",
-    "에메랄드빛왕어",
-    "에메랄드빛군주어",
-    "에메랄드빛수호자어",
-    "에메랄드빛지배자어",
-    "에메랄드빛사자어",
-    "에메랄드빛전사어",
-    "에메랄드빛기사어",
-    "에메랄드빛현자어",
-    "에메랄드빛마도사어",
-    "에메랄드빛용왕어",
-    "에메랄드빛신어",
-    "에메랄드빛황제어",
-    "에메랄드빛여왕어",
-    "에메랄드빛귀족어",
-    "에메랄드빛정령어",
-    "에메랄드빛정복자어",
-    "에메랄드빛파수꾼어",
-    "에메랄드빛파괴자어",
-    "에메랄드빛창조자어",
-    "에메랄드빛초월자어",
-    "오팔빛왕어",
-    "오팔빛군주어",
-    "오팔빛수호자어",
-    "오팔빛지배자어",
-    "오팔빛사자어",
-    "오팔빛전사어",
-    "오팔빛기사어",
-    "오팔빛현자어",
-    "오팔빛마도사어",
-    "오팔빛용왕어",
-    "오팔빛신어",
-    "오팔빛황제어",
-    "오팔빛여왕어",
-    "오팔빛귀족어",
-    "오팔빛정령어",
-    "오팔빛정복자어",
-    "오팔빛파수꾼어",
-    "오팔빛파괴자어",
-    "오팔빛창조자어",
-    "오팔빛초월자어",
-    "수정빛왕어",
-    "수정빛군주어",
-    "수정빛수호자어",
-    "수정빛지배자어",
-    "수정빛사자어",
-    "수정빛전사어",
-    "수정빛기사어",
-    "수정빛현자어",
-    "수정빛마도사어",
-    "수정빛용왕어",
-    "수정빛신어",
-    "수정빛황제어",
-    "수정빛여왕어",
-    "수정빛귀족어",
-    "수정빛정령어",
-    "수정빛정복자어",
-    "수정빛파수꾼어",
-    "수정빛파괴자어",
-    "수정빛창조자어",
-    "수정빛초월자어",
-    "유성빛왕어",
-    "유성빛군주어",
-    "유성빛수호자어",
-    "유성빛지배자어",
-    "유성빛사자어",
-    "유성빛전사어",
-    "유성빛기사어",
-    "유성빛현자어",
-    "유성빛마도사어",
-    "유성빛용왕어",
-    "유성빛신어",
-    "유성빛황제어",
-    "유성빛여왕어",
-    "유성빛귀족어",
-    "유성빛정령어",
-    "유성빛정복자어",
-    "유성빛파수꾼어",
-    "유성빛파괴자어",
-    "유성빛창조자어",
-    "유성빛초월자어",
-    "오로라빛왕어",
-    "오로라빛군주어",
-    "오로라빛수호자어",
-    "오로라빛지배자어",
-    "오로라빛사자어",
-    "오로라빛전사어",
-    "오로라빛기사어",
-    "오로라빛현자어",
-    "오로라빛마도사어",
-    "오로라빛용왕어",
-    "오로라빛신어",
-    "오로라빛황제어",
-    "오로라빛여왕어",
-    "오로라빛귀족어",
-    "오로라빛정령어",
-    "오로라빛정복자어",
-    "오로라빛파수꾼어",
-    "오로라빛파괴자어",
-    "오로라빛창조자어",
-    "오로라빛초월자어",
-    "심연빛왕어",
-    "심연빛군주어",
-    "심연빛수호자어",
-    "심연빛지배자어",
-    "심연빛사자어",
-    "심연빛전사어",
-    "심연빛기사어",
-    "심연빛현자어",
-    "심연빛마도사어",
-    "심연빛용왕어",
-    "심연빛신어",
-    "심연빛황제어",
-    "심연빛여왕어",
-    "심연빛귀족어",
-    "심연빛정령어",
-    "심연빛정복자어",
-    "심연빛파수꾼어",
-    "심연빛파괴자어",
-    "심연빛창조자어",
-    "심연빛초월자어",
-    "성좌빛왕어"
+
+"멸치","정어리","고등어","전갱이","청어","갈치","꽁치","삼치","참치","방어",
+"연어","송어","잉어","붕어","메기","가물치","농어","우럭","광어","도미",
+"복어","쥐치","오징어","문어","새우","꽃게","대게","랍스터","장어","청새치",
+"황새치","돛새치","가오리","상어","고래상어","귀상어","백상아리","범고래","돌고래","참돌고래",
+"해파리","불가사리","성게","소라","전복","조개","진주조개","해마","복해마","흰동가리",
+"블루탱","나비고기","천사어","사자어","곰치","전기뱀장어","아귀","심해어","초롱아귀","용암어",
+
+"불꽃잉어","얼음송어","번개참치","독도미","황금붕어","황금잉어","황금연어","황금참치","황금상어","황금고래",
+"무지개송어","무지개잉어","무지개참치","별빛도미","별빛상어","달빛연어","달빛고래","태양참치","태양상어","태양고래",
+"우주어","성운어","혜성어","행성어","블랙홀어","차원어","시간어","공간어","미래어","과거어",
+"신화어","신룡어","용왕어","해신어","바다신어","천사어왕","악마어왕","신성어","암흑어","혼돈어",
+"질서어","창조어","파괴어","영원어","무한어","궁극어","초궁극어","절대어","초월어왕","미지어",
+
+"태초의 물고기","천상의 물고기","절대의 물고기","무한의 물고기","세계수어","신의 물고기","시간의 지배자","공간의 지배자","차원의 지배자","우주의 지배자",
+"창조의 물고기","종말의 물고기","영원의 물고기","미지의 왕","최후의 물고기","낚시왕의 물고기",
+"심해의 군주","바다의 군주","폭풍참치","폭풍상어","폭풍고래","번개의 지배자","불꽃의 지배자","얼음의 지배자","태양의 지배자","달의 지배자",
+"별의 지배자","은하어","은하상어","은하고래","초신성어","혜성의 왕","행성의 왕","블랙홀의 왕","시간의 왕","공간의 왕",
+"차원의 왕","우주의 왕","신계어","천계어","마계어","신성한 고래","암흑의 고래","혼돈의 고래","질서의 고래","창조의 왕",
+"파괴의 왕","영원의 왕","무한의 왕","궁극의 왕","절대의 왕","초월의 왕","미지의 신","태초의 왕","천상의 왕","전설의 낚시왕",
+"심해룡어","해신의 사자","용왕의 사자","차원의 용","시간의 용","공간의 용","우주의 용","창조룡","파괴룡","영원룡",
+"무한룡","절대룡","초월룡","미지룡","신의 사자","세계의 수호어","세계의 파괴어","세계의 창조어","최후의 왕","궁극의 물고기",
+
+"심연의 물고기","태양룡어","달빛룡어","별빛룡어","은하의 지배자","성운의 지배자","우주룡","차원룡왕","시간룡왕","공간룡왕",
+"창조신어","파괴신어","영원신어","무한신어"
 ];
 
 const fish=fishNames.map((name,index)=>{
 
-    const tier=Math.min(13,Math.floor(index/46)+1);
+    const tier=Math.min(
+        13,
+        Math.floor(index/10)+1
+    );
+
     const r=rarity[tier-1];
 
     return{
@@ -1283,60 +711,38 @@ const fish=fishNames.map((name,index)=>{
 
 
 /* ==============================
-   아이템 550개
+   아이템 150개
 ============================== */
 
 const prefixes=[
-    "낡은",
-    "빛나는",
-    "신비한",
-    "황금",
-    "무지개",
-    "전설의",
-    "고대의",
-    "심해의",
-    "천상의",
-    "차원의",
-    "신성한",
-    "암흑의",
-    "시간의",
-    "공간의",
-    "우주의",
-    "태초의",
-    "절대의",
-    "초월의",
-    "불멸의",
-    "반물질",
-    "별빛",
-    "달빛",
-    "태양의",
-    "은하의",
-    "심연의"
+"낡은",
+"빛나는",
+"신비한",
+"황금",
+"무지개",
+"전설의",
+"고대의",
+"심해의",
+"천상의",
+"차원의",
+"신성한",
+"암흑의",
+"시간의",
+"공간의",
+"우주의"
 ];
 
 const bases=[
-    "조개",
-    "진주",
-    "보석",
-    "상자",
-    "열쇠",
-    "나침반",
-    "메달",
-    "반지",
-    "동전",
-    "수정",
-    "왕관",
-    "부적",
-    "깃털",
-    "산호",
-    "해초",
-    "진주알",
-    "룬",
-    "구슬",
-    "마석",
-    "유물",
-    "핵",
-    "토큰"
+"조개",
+"진주",
+"보석",
+"상자",
+"열쇠",
+"나침반",
+"메달",
+"반지",
+"동전",
+"수정"
 ];
 
 const abilityNames={
@@ -1352,11 +758,30 @@ const items=[];
 let itemIndex=0;
 
 for(const prefix of prefixes){
+
     for(const base of bases){
-        const tier=Math.min(13,Math.floor(itemIndex/43)+1);
+
+        const tier=Math.floor(itemIndex/10)+1;
         const power=2+tier*2;
-        const ability1=["luck","speed","sell","item","rare","exp"][itemIndex%6];
-        const ability2=["sell","item","rare","exp","luck","speed"][itemIndex%6];
+
+        const ability1=[
+            "luck",
+            "speed",
+            "sell",
+            "item",
+            "rare",
+            "exp"
+        ][itemIndex%6];
+
+        const ability2=[
+            "sell",
+            "item",
+            "rare",
+            "exp",
+            "luck",
+            "speed"
+        ][itemIndex%6];
+
         items.push({
             id:"item_"+itemIndex,
             name:prefix+" "+base,
@@ -1367,9 +792,11 @@ for(const prefix of prefixes){
                 [ability2]:Math.floor(power*0.7)
             }
         });
+
         itemIndex++;
     }
 }
+
 
 /* ==============================
    낚싯대
@@ -1411,6 +838,54 @@ const rods=[
         name:"미지의 낚싯대",
         price:10000000,
         luck:10
+    },
+    {
+        id:"cosmic",
+        name:"🌌 우주 낚싯대",
+        price:30000000,
+        luck:15
+    },
+    {
+        id:"dimension",
+        name:"🌀 차원 낚싯대",
+        price:100000000,
+        luck:22
+    },
+    {
+        id:"eternal",
+        name:"♾️ 영원의 낚싯대",
+        price:500000000,
+        luck:35
+    },
+    {
+        id:"galaxy",
+        name:"🌌 은하 낚싯대",
+        price:1000000000,
+        luck:50
+    },
+    {
+        id:"multiverse",
+        name:"🌠 다중우주 낚싯대",
+        price:3000000000,
+        luck:70
+    },
+    {
+        id:"absolute",
+        name:"💠 절대 낚싯대",
+        price:10000000000,
+        luck:100
+    },
+    {
+        id:"creator",
+        name:"👑 창조자의 낚싯대",
+        price:50000000000,
+        luck:150
+    },
+    {
+        id:"infinite",
+        name:"∞ 무한 낚싯대",
+        price:100000000000,
+        luck:250
     }
 ];
 
@@ -1455,6 +930,54 @@ const locations=[
         name:"차원 바다",
         price:50000000,
         luck:10
+    },
+    {
+        id:"cosmic",
+        name:"🌌 우주 심연",
+        price:30000000,
+        luck:15
+    },
+    {
+        id:"void",
+        name:"🕳️ 공허의 바다",
+        price:100000000,
+        luck:22
+    },
+    {
+        id:"eternal",
+        name:"♾️ 영원의 해역",
+        price:500000000,
+        luck:35
+    },
+    {
+        id:"galaxy",
+        name:"🌌 은하 해역",
+        price:1000000000,
+        luck:50
+    },
+    {
+        id:"multiverse",
+        name:"🌠 다중우주 해역",
+        price:3000000000,
+        luck:70
+    },
+    {
+        id:"absolute",
+        name:"💠 절대의 해역",
+        price:10000000000,
+        luck:100
+    },
+    {
+        id:"creator",
+        name:"👑 창조자의 해역",
+        price:50000000000,
+        luck:150
+    },
+    {
+        id:"infinite",
+        name:"∞ 무한의 해역",
+        price:100000000000,
+        luck:250
     }
 ];
 
@@ -1487,6 +1010,54 @@ const baits=[
         name:"신성 미끼",
         price:10000,
         luck:3
+    },
+    {
+        id:"cosmic",
+        name:"🌌 우주 미끼",
+        price:30000000,
+        luck:8
+    },
+    {
+        id:"void",
+        name:"🕳️ 공허 미끼",
+        price:100000000,
+        luck:12
+    },
+    {
+        id:"eternal",
+        name:"♾️ 영원 미끼",
+        price:500000000,
+        luck:20
+    },
+    {
+        id:"galaxy",
+        name:"🌌 은하 미끼",
+        price:1000000000,
+        luck:30
+    },
+    {
+        id:"multiverse",
+        name:"🌠 다중우주 미끼",
+        price:3000000000,
+        luck:45
+    },
+    {
+        id:"absolute",
+        name:"💠 절대 미끼",
+        price:10000000000,
+        luck:65
+    },
+    {
+        id:"creator",
+        name:"👑 창조자의 미끼",
+        price:50000000000,
+        luck:90
+    },
+    {
+        id:"infinite",
+        name:"∞ 무한 미끼",
+        price:100000000000,
+        luck:130
     }
 ];
 
@@ -1555,6 +1126,9 @@ function defaultUser(nickname){
         battleHistory:[],
 
         transferHistory:[],
+
+        // 🕵️ 레벨 훔치기 마지막 사용 시간
+        levelStealLastUsedAt:0,
 
         fishDexRewardClaimed:false
 
@@ -1656,6 +1230,59 @@ function signup(){
 
 }
 
+function ensureUserData(user, nickname){
+
+    // 기존에 가입한 계정도 새 상점 데이터 구조를 안전하게 사용하도록 보정
+    if(!user || typeof user!=="object"){
+        user=defaultUser(nickname);
+    }
+
+    if(!Array.isArray(user.ownedRods))
+        user.ownedRods=["wood"];
+
+    if(!Array.isArray(user.ownedLocations))
+        user.ownedLocations=["sea"];
+
+    if(!user.baitInventory || typeof user.baitInventory!=="object")
+        user.baitInventory={basic:1};
+
+    if(!user.baitInventory.basic)
+        user.baitInventory.basic=1;
+
+    if(!user.currentRod || !rods.some(x=>x.id===user.currentRod))
+        user.currentRod="wood";
+
+    if(!user.currentLocation || !locations.some(x=>x.id===user.currentLocation))
+        user.currentLocation="sea";
+
+    if(!user.currentBait || !baits.some(x=>x.id===user.currentBait))
+        user.currentBait="basic";
+
+    if(!Array.isArray(user.equippedItems))
+        user.equippedItems=[];
+
+    if(!user.itemStats || typeof user.itemStats!=="object"){
+        user.itemStats={
+            luck:0,speed:0,sell:0,item:0,rare:0,exp:0
+        };
+    }
+
+    if(!Array.isArray(user.transferHistory))
+        user.transferHistory=[];
+
+    if(!Array.isArray(user.battleHistory))
+        user.battleHistory=[];
+
+    if(!Array.isArray(user.levelStealHistory))
+        user.levelStealHistory=[];
+
+    if(typeof user.levelStealLastUsedAt!=="number")
+        user.levelStealLastUsedAt=0;
+
+    return user;
+}
+
+
 function login(){
 
     const id=
@@ -1680,9 +1307,15 @@ function login(){
 
     currentAccountId=id;
 
-    currentUser=
+    currentUser=ensureUserData(
         accounts[id].game||
-        defaultUser(accounts[id].nickname);
+        defaultUser(accounts[id].nickname),
+        accounts[id].nickname
+    );
+
+    // 보정된 데이터를 즉시 저장
+    accounts[id].game=currentUser;
+    saveAccounts(accounts);
 
     localStorage.setItem(
         LOGIN_KEY,
@@ -2715,6 +2348,7 @@ function renderAll(){
     renderRanking();
     renderBattle();
     renderTransfer();
+    renderLevelSteal();
     renderAdmin();
 
 }
@@ -3770,7 +3404,7 @@ function renderRandomShop(){
                         :`
                             <button
                                 class="primary"
-                                onclick="buyRandomShop($index)">
+                                onclick="buyRandomShop(${index})">
                                 🛒 구매
                             </button>
                         `
@@ -3789,6 +3423,11 @@ function renderRandomShop(){
 ============================== */
 
 function renderShop(){
+
+    if(!currentUser)
+        return;
+
+    currentUser=ensureUserData(currentUser,currentUser.nickname);
 
     renderRandomShop();
 
@@ -4611,6 +4250,208 @@ function finishBattle(){
 
 
 /* ==============================
+   🕵️ 레벨 훔치기
+============================== */
+
+function renderLevelSteal(){
+
+    const select=document.getElementById("levelStealTarget");
+    if(!select || !currentUser)
+        return;
+
+    const accounts=getAccounts();
+
+    const targets=Object.entries(accounts)
+        .filter(([id])=>id!==currentAccountId);
+
+    if(targets.length===0){
+
+        select.innerHTML=
+            "<option>훔칠 대상 계정이 없습니다.</option>";
+
+    }else{
+
+        select.innerHTML=targets.map(
+            ([id,account])=>{
+
+                const game=
+                    account.game||
+                    defaultUser(account.nickname);
+
+                return `
+                    <option value="${id}">
+                        ${game.nickname} · Lv.${game.level}
+                    </option>
+                `;
+
+            }
+        ).join("");
+
+    }
+
+    const myLevelEl=document.getElementById("levelStealMyLevel");
+    const myCoinsEl=document.getElementById("levelStealMyCoins");
+    const cooldownEl=document.getElementById("levelStealCooldown");
+
+    if(myLevelEl)
+        myLevelEl.textContent=currentUser.level;
+
+    if(myCoinsEl)
+        myCoinsEl.textContent=currentUser.coins.toLocaleString();
+
+    if(cooldownEl){
+
+        const remain=Math.max(
+            0,
+            (currentUser.levelStealLastUsedAt||0)
+            +LEVEL_STEAL_COOLDOWN
+            -Date.now()
+        );
+
+        if(remain>0){
+
+            cooldownEl.textContent=
+                "⏳ 다음 사용까지 "+
+                Math.ceil(remain/1000)+
+                "초";
+
+        }else{
+
+            cooldownEl.textContent=
+                "🟢 지금 사용할 수 있습니다.";
+
+        }
+
+    }
+
+}
+
+
+function stealLevel(){
+
+    if(!currentUser)
+        return;
+
+    const targetId=
+        document.getElementById("levelStealTarget")?.value;
+
+    const accounts=getAccounts();
+    const target=accounts[targetId];
+
+    if(!target){
+
+        toast("대상 유저를 찾을 수 없습니다.");
+        return;
+
+    }
+
+    if(targetId===currentAccountId){
+
+        toast("자기 자신의 레벨은 훔칠 수 없습니다.");
+        return;
+
+    }
+
+    const now=Date.now();
+    const last=Number(currentUser.levelStealLastUsedAt)||0;
+
+    if(now-last<LEVEL_STEAL_COOLDOWN){
+
+        const remain=
+            Math.ceil(
+                (LEVEL_STEAL_COOLDOWN-(now-last))/1000
+            );
+
+        toast("⏳ "+remain+"초 후 다시 사용할 수 있습니다.");
+        return;
+
+    }
+
+    if(currentUser.coins<LEVEL_STEAL_COST){
+
+        toast(
+            "💰 코인이 부족합니다. 필요: "+
+            LEVEL_STEAL_COST.toLocaleString()+
+            " 코인"
+        );
+        return;
+
+    }
+
+    if(!target.game)
+        target.game=defaultUser(target.nickname);
+
+    const targetUser=target.game;
+
+    if(currentUser.level<2){
+
+        toast("⭐ 레벨 2 이상부터 사용할 수 있습니다.");
+        return;
+
+    }
+
+    if(targetUser.level<2){
+
+        toast("⭐ 대상의 레벨이 2 미만이라 훔칠 수 없습니다.");
+        return;
+
+    }
+
+    // 레벨 1을 서로 이동
+    currentUser.coins-=LEVEL_STEAL_COST;
+    currentUser.level+=LEVEL_STEAL_AMOUNT;
+    targetUser.level=Math.max(
+        1,
+        targetUser.level-LEVEL_STEAL_AMOUNT
+    );
+
+    // 사용 기록 저장
+    currentUser.levelStealLastUsedAt=now;
+
+    if(!currentUser.levelStealHistory)
+        currentUser.levelStealHistory=[];
+
+    currentUser.levelStealHistory.push({
+        type:"steal",
+        target:targetUser.nickname,
+        amount:LEVEL_STEAL_AMOUNT,
+        time:now
+    });
+
+    currentUser.levelStealHistory=
+        currentUser.levelStealHistory.slice(-50);
+
+    if(!targetUser.levelStealHistory)
+        targetUser.levelStealHistory=[];
+
+    targetUser.levelStealHistory.push({
+        type:"lost",
+        target:currentUser.nickname,
+        amount:LEVEL_STEAL_AMOUNT,
+        time:now
+    });
+
+    targetUser.levelStealHistory=
+        targetUser.levelStealHistory.slice(-50);
+
+    accounts[currentAccountId].game=currentUser;
+    accounts[targetId].game=targetUser;
+
+    saveAccounts(accounts);
+
+    toast(
+        "🕵️ "+
+        targetUser.nickname+
+        "의 레벨 "+LEVEL_STEAL_AMOUNT+
+        "을 훔쳤습니다! → 내 Lv."+currentUser.level
+    );
+
+    renderAll();
+
+}
+
+
+/* ==============================
    송금 UI
 ============================== */
 
@@ -4757,14 +4598,77 @@ setInterval(
     10000
 );
 
+setInterval(()=>{
+    if(currentUser)
+        renderLevelSteal();
+},1000);
+
 
 /* 실행 */
 
 autoLogin();
 
-
 </script>
 
-</body>
-</html>
+
+
+<script>
+function getFullHTMLSource(){
+    return "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+}
+
+function copyAllSource(){
+    const source=getFullHTMLSource();
+    const btn=document.getElementById("copyAllSourceBtn");
+
+    function success(){
+        if(btn){
+            const old=btn.textContent;
+            btn.textContent="✅ 전체 코드 복사 완료!";
+            setTimeout(()=>btn.textContent=old,1800);
+        }
+    }
+
+    if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(source).then(success).catch(()=>{
+            fallbackCopySource(source,success);
+        });
+    }else{
+        fallbackCopySource(source,success);
+    }
+}
+
+function fallbackCopySource(source,done){
+    const box=document.createElement("textarea");
+    box.value=source;
+    box.style.position="fixed";
+    box.style.left="-9999px";
+    document.body.appendChild(box);
+    box.focus();
+    box.select();
+
+    try{
+        document.execCommand("copy");
+        done();
+    }catch(e){
+        alert("자동 복사에 실패했습니다. 코드 보기에서 전체 코드를 직접 복사해주세요.");
+    }
+
+    box.remove();
+}
+
+function toggleSourceViewer(){
+    const viewer=document.getElementById("sourceViewer");
+    const box=document.getElementById("sourceCodeBox");
+
+    if(viewer.style.display==="none"){
+        box.value=getFullHTMLSource();
+        viewer.style.display="block";
+    }else{
+        viewer.style.display="none";
+    }
+}
+</script>
+
+</body></html>
 
